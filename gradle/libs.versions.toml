@@ -1,0 +1,24 @@
+[versions]
+activityCompose = "1.7.2"
+androidxCore = "1.9.0"
+androidxLifecycle = "2.6.2"
+espressoCore = "3.5.1"
+hiltAndroidCompiler = "2.44"
+junitVersion = "1.1.5"
+junit = "4.13.2"
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
+
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+junit = { module = "junit:junit", version.ref = "junit" }
+[plugins]
+
+[bundles]
+unit-tests = ["junit"]
+android-tests = ["androidx-junit", "androidx-espresso-core"]
