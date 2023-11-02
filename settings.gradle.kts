@@ -20,4 +20,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "FTT"
 include(":app")
- 
+include(":timetable")
