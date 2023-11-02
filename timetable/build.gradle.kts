@@ -1,21 +1,16 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.com.android.application)
+    id("com.android.library")
+//    alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.com.google.dagger.hilt.android)
-    kotlin("kapt")
 }
 
 android {
-    namespace = "ru.nsu.ftt"
+    namespace = "ru.nsu.fit.timetable"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "ru.nsu.ftt"
         minSdk = 24
-        targetSdk = 33
-        versionCode = 24
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -39,9 +34,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    hilt {
-        enableAggregatingTask = true
-    }
     buildFeatures {
         compose = true
     }
@@ -55,18 +47,8 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
-    implementation(project(":timetable"))
 
-    //hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-
-    //androidX
     implementation(libs.androidx.core)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity.compose)
