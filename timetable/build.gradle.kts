@@ -57,6 +57,11 @@ kapt {
 }
 
 dependencies {
+    val fragment_version = "1.6.2"
+
+    // Kotlin
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -65,6 +70,7 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
+
     implementation(libs.androidx.core)
     implementation(libs.androidx.lifecycle)
 

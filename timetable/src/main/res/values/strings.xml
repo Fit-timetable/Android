@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TimeTable</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="icon_pin_schedule">Закрепить\nрасписание</string>
+    <string name="type_lesson_lecture">лекция</string>
+    <string name="type_lesson_seminar">Семинар</string>
 </resources>
