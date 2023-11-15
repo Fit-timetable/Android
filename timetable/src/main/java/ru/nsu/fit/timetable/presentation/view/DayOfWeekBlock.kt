@@ -25,31 +25,33 @@ import ru.nsu.fit.timetable.presentation.ui.theme.StaticBlack
 
 @Composable
 fun DayOfWeekBlock(state: TimeTableState, oncClick: () -> Unit) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 10.dp)) {
-        Icon(painter = painterResource(id = R.drawable.ic_more), contentDescription = "")
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
         state.dates.forEach { date ->
-            Column(
+            Box(
                 modifier = Modifier
-                    .padding(all = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(5.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
+                    .padding(horizontal = 5.dp)
+                    .border(
+                        width = 1.dp, color = BorderDate,
+                        shape = RoundedCornerShape(size = 10.dp)
+                    )
+                    .clickable { oncClick() }
+            )
+            {
+                Column(
                     modifier = Modifier
-                        .border(
-                            width = 1.dp, color = BorderDate,
-                            shape = RoundedCornerShape(size = 10.dp)
-                        )
-                        .clickable { oncClick() }
-                )
-                {
+                        .padding(vertical = 8.dp)
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     TextOfDateBlock(text = date.dayOfWeek)
                     TextOfDateBlock(text = date.numberOfMonth)
                 }
             }
-            Icon(painter = painterResource(id = R.drawable.ic_less), contentDescription = "")
         }
     }
 }
@@ -58,7 +60,7 @@ fun DayOfWeekBlock(state: TimeTableState, oncClick: () -> Unit) {
 private fun TextOfDateBlock(text: String) {
     Text(
         text = text, style = TextStyle(
-            fontSize = 16.sp,
+            fontSize = 20.sp,
             color = StaticBlack,
         )
     )

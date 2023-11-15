@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -43,8 +45,11 @@ enum class LessonType {
 
 @Composable
 fun LessonBlock(state: TimeTableState) {
-    LazyColumn() {
-        items(state.lessonsUi) { lesson ->
+    LazyColumn(
+        modifier = Modifier.padding(horizontal = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        itemsIndexed(state.lessonsUi) { index, lesson ->
             val color = when (lesson.typeClass) {
                 LessonType.Lecture -> LectureBackGround
                 LessonType.Seminar -> SeminarBackGround
@@ -54,30 +59,38 @@ fun LessonBlock(state: TimeTableState) {
                 modifier = Modifier
                     .height(IntrinsicSize.Min)
                     .fillMaxWidth()
-                    .fillMaxHeight()
+                    .height(140.dp)
                     .background(CardBackGround),
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Row {
-
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            CardBackGround,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                ) {
                     Box(
                         modifier = Modifier.background(color, shape = RoundedCornerShape(10.dp)),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
                             modifier = Modifier
-                                .padding(vertical = 7.dp, horizontal = 7.dp),
+                                .padding(vertical = 7.dp, horizontal = 7.dp)
+                                .height(140.dp)
+                                .width(120.dp),
                             verticalArrangement = Arrangement.spacedBy(5.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "1", style = TextStyle(
-                                    fontSize = 32.sp, color = StaticWhite
+                                text = index.toString(), style = TextStyle(
+                                    fontSize = 20.sp, color = StaticWhite
                                 )
                             )
                             Text(
                                 text = lesson.time, style = TextStyle(
-                                    fontSize = 32.sp, color = StaticWhite
+                                    fontSize = 20.sp, color = StaticWhite
                                 )
                             )
 
@@ -89,7 +102,13 @@ fun LessonBlock(state: TimeTableState) {
                         }
                     }
                     if (lesson.typeClass != LessonType.WindowSchedule) {
-                        Row(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth().background(
+                                    CardBackGround,
+                                    shape = RoundedCornerShape(10.dp)
+                                )
+                        ) {
                             Column(
                                 modifier = Modifier
                                     .fillMaxHeight()
@@ -144,7 +163,7 @@ fun LessonBlock(state: TimeTableState) {
 fun TypeLessonBlock(type: String) {
     Text(
         text = type, style = TextStyle(
-            fontSize = 32.sp, color = StaticWhite
+            fontSize = 20.sp, color = StaticWhite
         )
     )
 }

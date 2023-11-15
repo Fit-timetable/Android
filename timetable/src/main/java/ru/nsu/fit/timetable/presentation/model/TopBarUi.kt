@@ -1,6 +1,6 @@
 package ru.nsu.fit.timetable.presentation.model
 
-data class ChoiceGroupUi(
+data class TopBarUi(
     val id : Int,
     val group : String,
     val date : String,
