@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import ru.nsu.fit.timetable.presentation.model.DateUi
 
 class TimeTableFragment : Fragment() {
 
@@ -23,9 +24,12 @@ class TimeTableFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val state = timeTableViewModel.stateFlow.collectAsState()
-                TimeTableScreen(state = state.value)
-                timeTableViewModel.processEvent(TimeTableEvent.OnGetScheduleForDayClick("20207", "" , " "))
+                TimeTableScreen(state = state.value, onClickDate = onClickDate)
             }
         }
+    }
+
+    private val onClickDate = {group: String, date: DateUi ->
+        timeTableViewModel.processEvent(TimeTableEvent.OnGetScheduleForDayClick(group, date))
     }
 }

@@ -23,16 +23,12 @@ data class TimeTableState(
 sealed class TimeTableEvent {
     class OnGetScheduleForDayClick(
         val group: String,
-        val dayOfWeek: String,
-        val dateOfMonth: String
+        val date: DateUi
     ) : TimeTableEvent()
 
 }
 
 sealed class TimeTableCommand {
-    class LoadedError(val error: String) : TimeTableCommand()
 
-    //тут в конструктор нужно список от домэйн слоя
-    class LoadedSchedule() : TimeTableCommand()
 
 }

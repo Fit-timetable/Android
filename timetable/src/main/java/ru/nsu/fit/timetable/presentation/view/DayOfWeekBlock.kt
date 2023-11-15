@@ -1,5 +1,6 @@
 package ru.nsu.fit.timetable.presentation.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,29 +14,41 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.nsu.fit.timetable.presentation.TimeTableState
-import ru.nsu.fit.timetable.presentation.ui.theme.BorderDate
+import ru.nsu.fit.timetable.presentation.model.DateUi
+import ru.nsu.fit.timetable.presentation.ui.theme.BackGroundDate
+import ru.nsu.fit.timetable.presentation.ui.theme.ScreenBackGround
 import ru.nsu.fit.timetable.presentation.ui.theme.StaticBlack
+import ru.nsu.fit.timetable.presentation.ui.theme.StaticWhite
 
 @Composable
-fun DayOfWeekBlock(state: TimeTableState, oncClick: () -> Unit) {
+fun DayOfWeekBlock(state: TimeTableState, oncClick: (group: String, date: DateUi) -> Unit) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth().
+        padding(vertical = 13.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         state.dates.forEach { date ->
+            var backGround = ScreenBackGround
+            var textColor = StaticBlack
+            if (date.clickable) {
+                backGround = BackGroundDate
+                textColor = StaticWhite
+            }
             Box(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
                     .border(
-                        width = 1.dp, color = BorderDate,
+                        width = 1.dp, color = BackGroundDate,
                         shape = RoundedCornerShape(size = 10.dp)
                     )
-                    .clickable { oncClick() }
+                    .background(backGround, shape =  RoundedCornerShape(size = 10.dp))
+                    .clickable { state.group.group?.let { oncClick(it, date) } }
             )
             {
                 Column(
@@ -45,8 +58,8 @@ fun DayOfWeekBlock(state: TimeTableState, oncClick: () -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TextOfDateBlock(text = date.dayOfWeek)
-                    TextOfDateBlock(text = date.numberOfMonth)
+                    TextOfDateBlock(text = date.dayOfWeek, textColor)
+                    TextOfDateBlock(text = date.numberOfMonth, textColor)
                 }
             }
         }
@@ -54,11 +67,11 @@ fun DayOfWeekBlock(state: TimeTableState, oncClick: () -> Unit) {
 }
 
 @Composable
-private fun TextOfDateBlock(text: String) {
+private fun TextOfDateBlock(text: String, color: Color) {
     Text(
         text = text, style = TextStyle(
             fontSize = 20.sp,
-            color = StaticBlack,
+            color = color,
         )
     )
 }

@@ -3,7 +3,6 @@ package ru.nsu.fit.timetable.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -21,11 +20,12 @@ class TimetableViewModel : ViewModel() {
         MutableStateFlow(TimeTableState(dates = getCurrentWeek()))
     var stateFlow: StateFlow<TimeTableState> = _stateFlow
 
-    fun getGroupScheduleForDay(group: String, dayOfWeek: String, dateOfMonth: String) {
+    private fun getGroupScheduleForDay(group: String, date: DateUi) {
         _stateFlow.value = _stateFlow.value.copy(loading = true)
         viewModelScope.launch {
-            delay(200)
-            _stateFlow.value = _stateFlow.value.copy(loading = false, lessonsUi = listLesson)
+            val dates = changeSelectedDate(_stateFlow.value.dates, date)
+            _stateFlow.value =
+                _stateFlow.value.copy(loading = false, lessonsUi = listLesson, dates = dates)
         }
     }
 
@@ -33,8 +33,7 @@ class TimetableViewModel : ViewModel() {
         when (event) {
             is TimeTableEvent.OnGetScheduleForDayClick -> getGroupScheduleForDay(
                 group = event.group,
-                dayOfWeek = event.dayOfWeek,
-                dateOfMonth = event.dateOfMonth
+                date = event.date
             )
         }
     }
@@ -48,7 +47,11 @@ class TimetableViewModel : ViewModel() {
         }.time
         var dateStartOfWeek = dateFormat.format(startOfWeek).toInt()
         return listOf(
-            DateUi(dayOfWeek = "Пн", numberOfMonth = (dateStartOfWeek++).toString()),
+            DateUi(
+                dayOfWeek = "Пн",
+                numberOfMonth = (dateStartOfWeek++).toString(),
+                clickable = true
+            ),
             DateUi(dayOfWeek = "Вт", numberOfMonth = (dateStartOfWeek++).toString()),
             DateUi(dayOfWeek = "Ср", numberOfMonth = (dateStartOfWeek++).toString()),
             DateUi(dayOfWeek = "Чт", numberOfMonth = (dateStartOfWeek++).toString()),
@@ -62,6 +65,18 @@ class TimetableViewModel : ViewModel() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TimetableViewModel() as T
         }
+    }
+
+    private fun changeSelectedDate(dates: List<DateUi>, currentDate: DateUi): List<DateUi> {
+        val updateDates = mutableListOf<DateUi>()
+        dates.map {
+            if (it == currentDate) {
+                updateDates.add(it.copy(clickable = true))
+            } else {
+                updateDates.add(it.copy(clickable = false))
+            }
+        }
+        return updateDates
     }
 
     companion object {
@@ -91,7 +106,13 @@ class TimetableViewModel : ViewModel() {
                 subject = "Мат.Анализ",
                 auditorium = "3205",
                 typeClass = LessonType.Seminar
-            )
+            ),
+            LessonUi(
+                time = "16:20 - 18:05",
+                subject = "Мат.Анализ",
+                auditorium = "3205",
+                typeClass = LessonType.Seminar
+            ),
         )
         val group = TopBarUi(
             group = "20207",

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -60,7 +59,7 @@ fun LessonBlock(state: TimeTableState) {
                     modifier = Modifier
                         .height(IntrinsicSize.Min)
                         .fillMaxWidth()
-                        .height(130.dp)
+                        .height(110.dp)
                         .background(CardBackGround),
                     shape = RoundedCornerShape(10.dp)
                 ) {
@@ -82,19 +81,19 @@ fun LessonBlock(state: TimeTableState) {
                             Column(
                                 modifier = Modifier
                                     .padding(vertical = 7.dp, horizontal = 7.dp)
-                                    .height(130.dp)
-                                    .width(120.dp),
+                                    .height(110.dp)
+                                    .width(110.dp),
                                 verticalArrangement = Arrangement.spacedBy(5.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
                                     text = index.toString(), style = TextStyle(
-                                        fontSize = 20.sp, color = StaticWhite
+                                        fontSize = 23.sp, color = StaticWhite
                                     )
                                 )
                                 Text(
                                     text = lesson.time, style = TextStyle(
-                                        fontSize = 15.sp, color = StaticWhite
+                                        fontSize = 12.sp, color = StaticWhite
                                     )
                                 )
 
@@ -116,12 +115,12 @@ fun LessonBlock(state: TimeTableState) {
                                 Column(
                                     modifier = Modifier
                                         .fillMaxHeight()
-                                        .padding(start = 10.dp),
+                                        .padding(start = 15.dp),
                                     verticalArrangement = Arrangement.Center
                                 ) {
                                     Text(
                                         text = lesson.subject, style = TextStyle(
-                                            fontSize = 20.sp,
+                                            fontSize = 10.sp,
                                             color = StaticBlack
                                         )
                                     )
