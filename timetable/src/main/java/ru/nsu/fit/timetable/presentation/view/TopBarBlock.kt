@@ -36,7 +36,9 @@ fun TopBarBlock(state: TimeTableState) {
     ) {
         Row() {
             Column {
-                GroupBlock(group = state.group.group)
+                if (state.group.group != null) {
+                    GroupBlock(group = state.group.group)
+                }
                 DateBlock(state = state)
             }
             Box(
