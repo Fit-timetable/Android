@@ -29,16 +29,6 @@ class TimetableViewModel @Inject constructor(
         MutableStateFlow(TimeTableState(dates = getCurrentWeek()))
     var stateFlow: StateFlow<TimeTableState> = _stateFlow
 
-
-    init {
-        viewModelScope.launch {
-            repeat(100) {
-                delay(1000)
-                Log.d("MY_TAG", it.toString())
-            }
-        }
-    }
-
     fun processEvent(event: TimeTableEvent) {
         when (event) {
             is TimeTableEvent.OnGetScheduleForDayClick -> getGroupScheduleForDay(

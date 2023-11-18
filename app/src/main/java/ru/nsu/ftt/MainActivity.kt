@@ -27,11 +27,5 @@ class MainActivity : AppCompatActivity() {
                 .setReorderingAllowed(true)
                 .commit()
         }
-        lifecycleScope.launch {
-            delay(5000)
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentMain, TimeTableFragment())
-                .commit()
-        }
     }
 }
