@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlaceRemote(
-    @SerialName("remoteLink")
-    val remoteLink: String = "",
+    @SerialName("meetLink")
+    val meetLink: String? = "",
     @SerialName("room")
     val room: String = "",
 )

@@ -1,10 +1,23 @@
 package ru.nsu.fit.timetable.domain.models
 
 data class WeekSchedule(
-    val monday: List<Lesson>,
-    val tuesday: List<Lesson>,
-    val wednesday: List<Lesson>,
-    val thursday: List<Lesson>,
-    val friday: List<Lesson>,
-    val saturday: List<Lesson>,
-)
+    var monday: List<Lesson> = emptyList(),
+    var tuesday: List<Lesson> = emptyList(),
+    var wednesday: List<Lesson> = emptyList(),
+    var thursday: List<Lesson> = emptyList(),
+    var friday: List<Lesson> = emptyList(),
+    var saturday: List<Lesson> = emptyList(),
+) {
+    fun getDaySchedule(weekDay: WeekDay): List<Lesson> {
+        return when (weekDay) {
+            WeekDay.MONDAY -> monday
+            WeekDay.TUESDAY -> tuesday
+            WeekDay.WEDNESDAY -> wednesday
+            WeekDay.THURSDAY -> thursday
+            WeekDay.FRIDAY -> friday
+            WeekDay.SATURDAY -> saturday
+        }
+    }
+}
+
+fun weekSchedule(block: WeekSchedule.() -> Unit) = WeekSchedule().apply(block)

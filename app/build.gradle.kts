@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.kotlin.kapt)
 }
@@ -65,12 +66,21 @@ dependencies {
 
     //hilt
     implementation(libs.hilt.android)
-    implementation(libs.material)
+    implementation(libs.material3)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
     kapt(libs.hilt.android.compiler)
+
+    // retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter)
+    implementation(libs.retrofit.logging.interceptor)
+
+    //kotlinX
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
 
     //androidX
     implementation(libs.androidx.core)

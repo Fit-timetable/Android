@@ -1,13 +1,13 @@
 package ru.nsu.fit.timetable.domain.models
 
-import java.util.Date
-
 data class Lesson(
-    val evenWeeksOnly: Boolean,
-    val oddWeeksOnly: Boolean,
-    val place: Place,
-    val startTime: Date,
-    val subject: String,
-    val teacher: String,
-    val type: LessonType
+    var id: Int? = 0,
+    var place: Place = place { },
+    var startTime: String = "",
+    var subject: String = "",
+    var teacher: String = "",
+    var lessonType: LessonType = LessonType.LECTURE,
+    var parity: LessonParity = LessonParity.ALWAYS,
 )
+
+fun lesson(block: Lesson.() -> Unit) = Lesson().apply(block)

@@ -36,7 +36,7 @@ import ru.nsu.fit.timetable.presentation.ui.theme.StaticBlack
 import ru.nsu.fit.timetable.presentation.ui.theme.StaticWhite
 import ru.nsu.fit.timetable.presentation.ui.theme.WindowScheduleBackGround
 
-enum class LessonType {
+enum class LessonTypeUi {
     Lecture,
     Seminar,
     WindowSchedule
@@ -48,110 +48,111 @@ fun LessonBlock(state: TimeTableState) {
         modifier = Modifier.padding(horizontal = 10.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        if (state.lessonsUi != null) {
-            itemsIndexed(state.lessonsUi) { index, lesson ->
-                val color = when (lesson.typeClass) {
-                    LessonType.Lecture -> LectureBackGround
-                    LessonType.Seminar -> SeminarBackGround
-                    LessonType.WindowSchedule -> WindowScheduleBackGround
-                }
-                Card(
+        if (state.lessonsUi == null) return@LazyColumn
+
+        itemsIndexed(state.lessonsUi) { index, lesson ->
+            val color = when (lesson.typeLesson) {
+                LessonTypeUi.Lecture -> LectureBackGround
+                LessonTypeUi.Seminar -> SeminarBackGround
+                LessonTypeUi.WindowSchedule -> WindowScheduleBackGround
+            }
+            Card(
+                modifier = Modifier
+                    .height(IntrinsicSize.Min)
+                    .fillMaxWidth()
+                    .height(110.dp)
+                    .background(CardBackGround),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Row(
                     modifier = Modifier
-                        .height(IntrinsicSize.Min)
                         .fillMaxWidth()
-                        .height(110.dp)
-                        .background(CardBackGround),
-                    shape = RoundedCornerShape(10.dp)
+                        .background(
+                            CardBackGround,
+                            shape = RoundedCornerShape(10.dp)
+                        )
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                CardBackGround,
-                                shape = RoundedCornerShape(10.dp)
-                            )
+                    Box(
+                        modifier = Modifier.background(
+                            color,
+                            shape = RoundedCornerShape(10.dp)
+                        ),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            modifier = Modifier.background(
-                                color,
-                                shape = RoundedCornerShape(10.dp)
-                            ),
-                            contentAlignment = Alignment.Center
+                        Column(
+                            modifier = Modifier
+                                .padding(vertical = 7.dp, horizontal = 7.dp)
+                                .height(110.dp)
+                                .width(110.dp),
+                            verticalArrangement = Arrangement.spacedBy(5.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = index.toString(), style = TextStyle(
+                                    fontSize = 23.sp, color = StaticWhite
+                                )
+                            )
+                            Text(
+                                text = lesson.time, style = TextStyle(
+                                    fontSize = 12.sp, color = StaticWhite
+                                )
+                            )
+
+                            when (lesson.typeLesson) {
+                                LessonTypeUi.Lecture -> TypeLessonBlock(type = stringResource(id = R.string.type_lesson_lecture))
+                                LessonTypeUi.Seminar -> TypeLessonBlock(type = stringResource(id = R.string.type_lesson_seminar))
+                                LessonTypeUi.WindowSchedule -> {}
+                            }
+                        }
+                    }
+                    if (lesson.typeLesson != LessonTypeUi.WindowSchedule) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    CardBackGround,
+                                    shape = RoundedCornerShape(10.dp)
+                                )
                         ) {
                             Column(
                                 modifier = Modifier
-                                    .padding(vertical = 7.dp, horizontal = 7.dp)
-                                    .height(110.dp)
-                                    .width(110.dp),
-                                verticalArrangement = Arrangement.spacedBy(5.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                    .fillMaxHeight()
+                                    .padding(start = 15.dp),
+                                verticalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = index.toString(), style = TextStyle(
-                                        fontSize = 23.sp, color = StaticWhite
+                                    text = lesson.subject, style = TextStyle(
+                                        fontSize = 10.sp,
+                                        color = StaticBlack
                                     )
                                 )
                                 Text(
-                                    text = lesson.time, style = TextStyle(
-                                        fontSize = 12.sp, color = StaticWhite
+                                    text = lesson.room, style = TextStyle(
+                                        fontSize = 20.sp,
+                                        color = StaticBlack
                                     )
                                 )
-
-                                when (lesson.typeClass) {
-                                    LessonType.Lecture -> TypeLessonBlock(type = stringResource(id = R.string.type_lesson_lecture))
-                                    LessonType.Seminar -> TypeLessonBlock(type = stringResource(id = R.string.type_lesson_seminar))
-                                    LessonType.WindowSchedule -> {}
-                                }
                             }
-                        }
-                        if (lesson.typeClass != LessonType.WindowSchedule) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth().background(
-                                        CardBackGround,
-                                        shape = RoundedCornerShape(10.dp)
-                                    )
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .padding(start = 15.dp),
-                                    verticalArrangement = Arrangement.Center
-                                ) {
-                                    Text(
-                                        text = lesson.subject, style = TextStyle(
-                                            fontSize = 10.sp,
-                                            color = StaticBlack
-                                        )
-                                    )
-                                    Text(
-                                        text = lesson.auditorium, style = TextStyle(
-                                            fontSize = 20.sp,
-                                            color = StaticBlack
-                                        )
-                                    )
-                                }
-                                Column(modifier = Modifier.fillMaxSize()) {
-                                    if (lesson.auditorium == "Google Meet") {
-                                        Box(
-                                            modifier = Modifier.fillMaxSize(),
-                                            contentAlignment = Alignment.TopEnd
-                                        ) {
-                                            Icon(
-                                                painter = painterResource(id = R.drawable.ic_meting),
-                                                contentDescription = "image description"
-                                            )
-                                        }
-                                    }
+                            Column(modifier = Modifier.fillMaxSize()) {
+                                if (lesson.room == "Google Meet") {
                                     Box(
                                         modifier = Modifier.fillMaxSize(),
-                                        contentAlignment = Alignment.BottomEnd
+                                        contentAlignment = Alignment.TopEnd
                                     ) {
                                         Icon(
-                                            painter = painterResource(id = R.drawable.ic_infromation),
+                                            painter = painterResource(id = R.drawable.ic_meting),
                                             contentDescription = "image description"
                                         )
                                     }
+                                }
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.BottomEnd
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_infromation),
+                                        contentDescription = "image description"
+                                    )
                                 }
                             }
                         }
@@ -160,8 +161,8 @@ fun LessonBlock(state: TimeTableState) {
             }
         }
     }
-
 }
+
 
 @Composable
 fun TypeLessonBlock(type: String) {

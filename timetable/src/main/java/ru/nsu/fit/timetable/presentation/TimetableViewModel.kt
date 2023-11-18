@@ -1,31 +1,41 @@
 package ru.nsu.fit.timetable.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import ru.nsu.fit.timetable.domain.ScheduleInteractorImpl
+import ru.nsu.fit.timetable.domain.models.mapToWeekDay
 import ru.nsu.fit.timetable.presentation.model.DateUi
 import ru.nsu.fit.timetable.presentation.model.LessonUi
 import ru.nsu.fit.timetable.presentation.model.TopBarUi
-import ru.nsu.fit.timetable.presentation.view.LessonType
+import ru.nsu.fit.timetable.presentation.model.mapToLessonUi
+import ru.nsu.fit.timetable.presentation.view.LessonTypeUi
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.TimeZone
+import javax.inject.Inject
 
-class TimetableViewModel : ViewModel() {
+@HiltViewModel
+class TimetableViewModel @Inject constructor(
+    private val scheduleInteractor: ScheduleInteractorImpl
+) : ViewModel() {
 
     private var _stateFlow: MutableStateFlow<TimeTableState> =
         MutableStateFlow(TimeTableState(dates = getCurrentWeek()))
     var stateFlow: StateFlow<TimeTableState> = _stateFlow
 
-    private fun getGroupScheduleForDay(group: String, date: DateUi) {
-        _stateFlow.value = _stateFlow.value.copy(loading = true)
+
+    init {
         viewModelScope.launch {
-            val dates = changeSelectedDate(_stateFlow.value.dates, date)
-            _stateFlow.value =
-                _stateFlow.value.copy(loading = false, lessonsUi = listLesson, dates = dates)
+            repeat(100) {
+                delay(1000)
+                Log.d("MY_TAG", it.toString())
+            }
         }
     }
 
@@ -35,6 +45,21 @@ class TimetableViewModel : ViewModel() {
                 group = event.group,
                 date = event.date
             )
+        }
+    }
+
+    private fun getGroupScheduleForDay(group: String, date: DateUi) {
+        val dates = changeSelectedDate(_stateFlow.value.dates, date)
+        _stateFlow.value = _stateFlow.value.copy(loading = true, dates = dates)
+        viewModelScope.launch {
+            scheduleInteractor.getUserWeekSchedule(group.toInt()).collect {
+                _stateFlow.value = _stateFlow.value.copy(
+                    loading = false,
+                    lessonsUi = it.getDaySchedule(date.dayOfWeek.mapToWeekDay())
+                        .map { lesson -> lesson.mapToLessonUi() },
+                    dates = dates
+                )
+            }
         }
     }
 
@@ -60,13 +85,6 @@ class TimetableViewModel : ViewModel() {
         )
     }
 
-    class ViewModelFactory constructor(
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TimetableViewModel() as T
-        }
-    }
-
     private fun changeSelectedDate(dates: List<DateUi>, currentDate: DateUi): List<DateUi> {
         val updateDates = mutableListOf<DateUi>()
         dates.map {
@@ -84,34 +102,34 @@ class TimetableViewModel : ViewModel() {
             LessonUi(
                 time = "9:00 - 10:35",
                 subject = "Мат.Анализ",
-                auditorium = "3107",
-                typeClass = LessonType.Lecture
+                room = "3107",
+                typeLesson = LessonTypeUi.Lecture
             ),
             LessonUi(
                 time = "10:50 - 12:25",
                 subject = "Мат.Анализ",
-                auditorium = "3205",
-                typeClass = LessonType.Seminar
+                room = "3205",
+                typeLesson = LessonTypeUi.Seminar
             ),
             LessonUi(
                 time = "12:40 - 14:15",
-                typeClass = LessonType.WindowSchedule
+                typeLesson = LessonTypeUi.WindowSchedule
             ),
             LessonUi(
                 time = "14:30 - 16:05",
-                typeClass = LessonType.WindowSchedule
+                typeLesson = LessonTypeUi.WindowSchedule
             ),
             LessonUi(
                 time = "16:20 - 18:05",
                 subject = "Мат.Анализ",
-                auditorium = "3205",
-                typeClass = LessonType.Seminar
+                room = "3205",
+                typeLesson = LessonTypeUi.Seminar
             ),
             LessonUi(
                 time = "16:20 - 18:05",
                 subject = "Мат.Анализ",
-                auditorium = "3205",
-                typeClass = LessonType.Seminar
+                room = "3205",
+                typeLesson = LessonTypeUi.Seminar
             ),
         )
         val group = TopBarUi(
