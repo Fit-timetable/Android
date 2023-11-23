@@ -15,6 +15,9 @@ enum class LessonType {
     @SerialName("LABORATORY")
     LABORATORY,
 
+    @SerialName("WINDOW")
+    WINDOW,
+
     @SerialName("PRACTICE")
     PRACTICE;
 
@@ -24,6 +27,7 @@ enum class LessonType {
             SEMINAR -> LessonTypeUi.Seminar
             PRACTICE -> LessonTypeUi.Seminar
             LABORATORY -> LessonTypeUi.Seminar
+            WINDOW -> LessonTypeUi.WindowSchedule
         }
     }
 }
