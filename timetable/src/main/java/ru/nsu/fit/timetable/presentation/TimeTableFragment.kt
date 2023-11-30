@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ru.nsu.fit.timetable.presentation.model.DateUi
+import ru.nsu.fit.timetable.presentation.view.TimeTableScreen
 
 @AndroidEntryPoint
 class TimeTableFragment : Fragment() {

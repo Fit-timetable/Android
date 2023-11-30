@@ -10,7 +10,9 @@ data class LessonUi(
     var typeLesson: LessonTypeUi = LessonTypeUi.WindowSchedule,
     var room: String = "",
     var teacher: String = "",
-    var parity: LessonParity = LessonParity.ALWAYS
+    var parity: LessonParity = LessonParity.ALWAYS,
+    var isClicked: Boolean = false,
+    var indexInDay: Int = 1,
 )
 
 fun lessonUi(block: LessonUi.() -> Unit) = LessonUi().apply(block)
