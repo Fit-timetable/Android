@@ -7,7 +7,7 @@ import ru.nsu.fit.timetable.domain.models.WeekSchedule
 import java.util.Date
 
 interface ScheduleRepository {
-    fun getUserWeekSchedule(groupId: Int): Flow<WeekSchedule>
+    suspend fun getUserWeekSchedule(group: Int): Flow<WeekSchedule>
 
     fun getRoomWeekSchedule(roomNumber: String): Flow<WeekSchedule>
 

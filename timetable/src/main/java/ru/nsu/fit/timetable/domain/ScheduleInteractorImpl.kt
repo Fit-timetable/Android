@@ -10,36 +10,36 @@ import javax.inject.Inject
 
 class ScheduleInteractorImpl @Inject constructor(
     private val scheduleRepository: ScheduleRepository
-) : ScheduleInteractor {
-    override fun getUserWeekSchedule(groupId : Int): Flow<WeekSchedule> {
-        return scheduleRepository.getUserWeekSchedule(groupId)
+) {
+    suspend fun getUserWeekSchedule(group: Int): Flow<WeekSchedule> {
+        return scheduleRepository.getUserWeekSchedule(group)
     }
 
-    override fun getRoomWeekSchedule(roomNumber: String): Flow<WeekSchedule> {
+    fun getRoomWeekSchedule(roomNumber: String): Flow<WeekSchedule> {
         return scheduleRepository.getRoomWeekSchedule(roomNumber)
     }
 
-    override fun getTeacherWeekSchedule(teacherId: Int): Flow<WeekSchedule> {
+    fun getTeacherWeekSchedule(teacherId: Int): Flow<WeekSchedule> {
         return scheduleRepository.getTeacherWeekSchedule(teacherId)
     }
 
-    override fun getFreeRoom(date: Date): Flow<Rooms> {
+    fun getFreeRoom(date: Date): Flow<Rooms> {
         return scheduleRepository.getFreeRoom(date)
     }
 
-    override suspend fun pinScheduleGroup(studentId: Int, group: Int) {
+    suspend fun pinScheduleGroup(studentId: Int, group: Int) {
         return scheduleRepository.pinScheduleGroup(studentId, group)
     }
 
-    override suspend fun addLesson(lessonForm: LessonForm) {
+    suspend fun addLesson(lessonForm: LessonForm) {
         return scheduleRepository.addLesson(lessonForm)
     }
 
-    override suspend fun resetSchedule(studentId: Int) {
+    suspend fun resetSchedule(studentId: Int) {
         return scheduleRepository.resetSchedule(studentId)
     }
 
-    override suspend fun updateLesson(lessonForm: LessonForm) {
+    suspend fun updateLesson(lessonForm: LessonForm) {
         return scheduleRepository.updateLesson(lessonForm)
     }
 }

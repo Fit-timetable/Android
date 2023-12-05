@@ -8,7 +8,7 @@ import java.util.Calendar
 data class TimeTableState(
     val loading: Boolean = false,
     val error: String? = null,
-    val lessonsUi: List<LessonUi>? = null,
+    val lessonsUi: List<LessonUi> = emptyList(),
     val group: TopBarUi = TopBarUi(
         group = "20201",
         date = Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString(),
