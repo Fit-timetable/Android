@@ -6,6 +6,7 @@ import ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.models.P
 import ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.models.WeekScheduleRemote
 import ru.nsu.fit.timetable.domain.models.Lesson
 import ru.nsu.fit.timetable.domain.models.LessonDate
+import ru.nsu.fit.timetable.domain.models.LessonParity
 import ru.nsu.fit.timetable.domain.models.Place
 import ru.nsu.fit.timetable.domain.models.WeekSchedule
 import ru.nsu.fit.timetable.domain.models.lesson
@@ -24,11 +25,12 @@ fun PlaceRemote.mapToPlace(): Place {
 fun LessonRemote.mapToLesson(): Lesson {
     return lesson {
         this.id = this@mapToLesson.id
-        this.parity = this@mapToLesson.parity
-        this.place = this@mapToLesson.place.mapToPlace()
+        this.parity = this@mapToLesson.parity ?: LessonParity.ALWAYS
+        this.place = this@mapToLesson.place?.mapToPlace() ?: place {  }
         this.startTime = this@mapToLesson.startTime
-        this.subject = this@mapToLesson.subject
-        this.teacher = this@mapToLesson.teacher
+//        this.finishTime
+        this.subject = this@mapToLesson.subject ?: ""
+        this.teacher = this@mapToLesson.teacher ?: ""
         this.lessonType = this@mapToLesson.type
     }
 }

@@ -1,7 +1,7 @@
 package ru.nsu.ftt.data.network
 
 data class ApiSettings(
-    val baseUrl: String = "http://192.168.1.39:8080",
+    val baseUrl: String = "http://192.168.0.105:8080",
     val userName: String = "",
     var authToken: String = ""
 ) {
