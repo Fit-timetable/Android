@@ -80,5 +80,12 @@ private fun TextOfDateBlock(text: String, color: Color) {
 @Composable
 @Preview
 fun DayOfWeekBlockPrewie() {
-
+    val state = TimeTableState(
+        loading = false,
+        error = null,
+        lessonsUi = listLesson,
+        group = group,
+        dates = dates
+    )
+   // DayOfWeekBlock(state = state){}
 }
