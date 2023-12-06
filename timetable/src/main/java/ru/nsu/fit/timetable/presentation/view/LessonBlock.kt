@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,10 +40,12 @@ import ru.nsu.fit.timetable.R
 import ru.nsu.fit.timetable.presentation.TimeTableState
 import ru.nsu.fit.timetable.presentation.model.LessonUi
 import ru.nsu.fit.timetable.presentation.ui.theme.CardBackGround
+import ru.nsu.fit.timetable.presentation.ui.theme.DividerColor
 import ru.nsu.fit.timetable.presentation.ui.theme.LectureBackGround
 import ru.nsu.fit.timetable.presentation.ui.theme.SeminarBackGround
 import ru.nsu.fit.timetable.presentation.ui.theme.StaticBlack
 import ru.nsu.fit.timetable.presentation.ui.theme.StaticWhite
+import ru.nsu.fit.timetable.presentation.ui.theme.TextDividerColor
 import ru.nsu.fit.timetable.presentation.ui.theme.WindowScheduleBackGround
 
 enum class LessonTypeUi {
@@ -69,47 +72,60 @@ fun LessonBlock(
             LessonTypeUi.Seminar -> SeminarBackGround
             LessonTypeUi.WindowSchedule -> WindowScheduleBackGround
         }
+        Column {
+            LessonUiTimeInfo(time = lesson.time)
         LessonBackgroundCard(
             modifier = modifier.clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(bounded = true, color = color),
             ) { onCardClick(lesson) }
         ) {
-            Row(
-                modifier = modifier.fillMaxWidth()
-            ) {
-                LessonUiTimeInfo(
-                    modifier
-                        .fillParentMaxHeight()
-                        .background(color),
-                    lesson,
-                )
-                if (lesson.typeLesson == LessonTypeUi.WindowSchedule) return@Row
-                LessonUiInfo(modifier, lesson)
-                Column(modifier = Modifier.fillMaxSize()) {
-                    if (lesson.room == "Google Meet") {
+                Row(
+                    modifier = modifier.fillMaxWidth()
+                ) {
+                    LessonUiInfo(
+                        modifier
+                            .fillParentMaxHeight()
+                            .background(color),
+                        lesson,
+                    )
+                    if (lesson.typeLesson == LessonTypeUi.WindowSchedule) return@Row
+                    LessonUiDescription(modifier, lesson)
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        if (lesson.room == "Google Meet") {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.TopEnd
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_meting),
+                                    contentDescription = "image description"
+                                )
+                            }
+                        }
                         Box(
                             modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.TopEnd
+                            contentAlignment = Alignment.BottomEnd
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_meting),
+                                painter = painterResource(id = R.drawable.ic_infromation),
                                 contentDescription = "image description"
                             )
                         }
                     }
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_infromation),
-                            contentDescription = "image description"
-                        )
-                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun LessonUiTimeInfo(modifier: Modifier = Modifier, time: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Divider(modifier = modifier.weight(2f), thickness = 2.dp, color = DividerColor)
+        Text(modifier = modifier
+            .padding(horizontal = 6.dp), text = time, color = TextDividerColor)
+        Divider(modifier = modifier.weight(2f), thickness = 2.dp, color = DividerColor)
     }
 }
 
@@ -133,7 +149,7 @@ fun LessonBackgroundCard(
 }
 
 @Composable
-fun LessonUiInfo(modifier: Modifier, lesson: LessonUi) {
+fun LessonUiDescription(modifier: Modifier, lesson: LessonUi) {
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -157,7 +173,7 @@ fun LessonUiInfo(modifier: Modifier, lesson: LessonUi) {
 
 
 @Composable
-fun LessonUiTimeInfo(modifier: Modifier = Modifier, lesson: LessonUi) {
+fun LessonUiInfo(modifier: Modifier = Modifier, lesson: LessonUi) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -173,11 +189,6 @@ fun LessonUiTimeInfo(modifier: Modifier = Modifier, lesson: LessonUi) {
             Text(
                 text = lesson.indexInDay.toString(), style = TextStyle(
                     fontSize = 33.sp, color = StaticWhite,
-                )
-            )
-            Text(
-                text = lesson.time, style = TextStyle(
-                    fontSize = 16.sp, color = StaticWhite
                 )
             )
 
