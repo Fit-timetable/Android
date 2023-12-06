@@ -7,12 +7,13 @@ import ru.nsu.fit.timetable.domain.models.LessonType
 @Serializable
 data class LessonRemote(
     var id: Int? = 0,
-    var place: PlaceRemote = placeRemote { },
+    var place: PlaceRemote? = placeRemote { },
+    var subject: String? = "",
+    var teacher: String? = "",
     var startTime: String = "",
-    var subject: String = "",
-    var teacher: String = "",
+    var finishTime: String = "",
     var type: LessonType = LessonType.SEMINAR,
-    var parity: LessonParity = LessonParity.ALWAYS,
+    var parity: LessonParity? = LessonParity.ALWAYS,
 )
 
 fun lessonRemote(block: LessonRemote.() -> Unit) = LessonRemote().apply(block)
