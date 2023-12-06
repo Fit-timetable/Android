@@ -2,7 +2,7 @@ package ru.nsu.ftt.utils
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import ru.nsu.ftt.data.network.ApiSettings
+import ru.nsu.fit.common.ApiSettings
 import javax.inject.Inject
 
 class AuthorizationInterceptor @Inject constructor(
@@ -10,7 +10,8 @@ class AuthorizationInterceptor @Inject constructor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val builder = originalRequest.newBuilder() //.header("Authorization", "")
+        val builder =
+            originalRequest.newBuilder().header("Authorization", apiSettings.tokens.authToken)
         return chain.proceed(builder.build())
     }
 }

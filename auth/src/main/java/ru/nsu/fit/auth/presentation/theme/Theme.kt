@@ -1,4 +1,4 @@
-package ru.nsu.fit.auth.ui.theme
+package ru.nsu.fit.auth.presentation.theme
 
 import android.app.Activity
 import android.os.Build

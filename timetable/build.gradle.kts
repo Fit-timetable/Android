@@ -57,7 +57,7 @@ kapt {
 }
 
 dependencies {
-
+    implementation(project(":common"))
 
     //hilt
     implementation(libs.hilt.android)

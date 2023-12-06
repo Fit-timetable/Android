@@ -23,3 +23,4 @@ rootProject.name = "FTT"
 include(":app")
 include(":timetable")
 include(":auth")
+include(":common")
