@@ -1,6 +1,6 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.com.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.com.google.dagger.hilt.android)
@@ -8,15 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "ru.nsu.ftt"
+    namespace = "ru.nsu.fit.auth"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.nsu.ftt"
         minSdk = 24
-        targetSdk = 33
-        versionCode = 24
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -40,12 +36,11 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    hilt {
-        enableAggregatingTask = true
-    }
     buildFeatures {
         compose = true
-        viewBinding = true
+    }
+    hilt {
+        enableAggregatingTask = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -62,36 +57,35 @@ kapt {
 }
 
 dependencies {
-    implementation(project(":timetable"))
-    implementation(project(":auth"))
+
 
     //hilt
     implementation(libs.hilt.android)
-    implementation(libs.material3)
-    implementation(libs.appcompat)
-    implementation(libs.constraintlayout)
-    implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
     kapt(libs.hilt.android.compiler)
 
-    // retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter)
-    implementation(libs.retrofit.logging.interceptor)
-
-    //kotlinX
+    //kotlinx
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
 
     //androidX
     implementation(libs.androidx.core)
     implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.fragment.ktx)
+
+    // retrofit
+    implementation(libs.retrofit)
+
+    //compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.material)
     implementation(libs.material3)
+
+    // tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
