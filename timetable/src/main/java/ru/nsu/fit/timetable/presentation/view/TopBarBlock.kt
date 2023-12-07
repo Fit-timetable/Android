@@ -92,16 +92,16 @@ fun GroupBlock(group: String, onValueChange: (String) -> Unit) {
 @Composable
 fun DateBlock(state: TimeTableState) {
     Row(modifier = Modifier.padding(start = 22.dp)) {
-        Text(text = state.group.date, style = TextStyle(fontSize = 12.sp))
+        Text(text = state.group.date, style = TextStyle(fontSize = 17.sp))
         Text(
             modifier = Modifier.padding(start = 5.dp),
             text = state.group.month,
-            style = TextStyle(fontSize = 12.sp)
+            style = TextStyle(fontSize = 17.sp)
         )
         Text(
             modifier = Modifier.padding(start = 5.dp),
             text = state.group.parityWeek,
-            style = TextStyle(fontSize = 12.sp)
+            style = TextStyle(fontSize = 17.sp)
         )
     }
 }

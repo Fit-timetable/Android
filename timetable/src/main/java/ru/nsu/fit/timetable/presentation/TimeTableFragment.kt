@@ -27,7 +27,12 @@ class TimeTableFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val state = timeTableViewModel.stateFlow.collectAsState()
-                TimeTableScreen(state = state.value, onClickDate = ::onClickDate, onChangeTextWithNumberGroup = ::onChaneNumberGroup,)
+                TimeTableScreen(
+                    state = state.value,
+                    onClickDate = ::onClickDate,
+                    onChangeTextWithNumberGroup = ::onChaneNumberGroup,
+                    onClickForward = ::onClickForwardWeek
+                )
             }
         }
     }
@@ -36,9 +41,13 @@ class TimeTableFragment : Fragment() {
         timeTableViewModel.processEvent(TimeTableEvent.OnGetScheduleForDayClick(group, date))
     }
 
-    private fun onChaneNumberGroup(group : String) {
+    private fun onChaneNumberGroup(group: String) {
         lifecycleScope.launch {
             timeTableViewModel.sharedFlow.emit(group)
         }
+    }
+
+    private fun onClickForwardWeek(group: String, offsetWeek : Int) {
+        timeTableViewModel.processEvent(TimeTableEvent.OnClickForwardWeek(group, offsetWeek))
     }
 }

@@ -35,6 +35,8 @@ class TimetableViewModel @Inject constructor(
 
     var sharedFlow: MutableSharedFlow<String> = MutableSharedFlow()
 
+    private var offsetWeekState = 0
+
     init {
         onChangeNumberGroup()
     }
@@ -55,7 +57,15 @@ class TimetableViewModel @Inject constructor(
                 group = event.group,
                 date = event.date
             )
+            is TimeTableEvent.OnClickForwardWeek -> moveScheduleWeek(event.group, event.offsetWeek)
         }
+    }
+
+    private fun moveScheduleWeek(group: String, offsetWeek : Int) {
+        offsetWeekState += offsetWeek
+        val dates = getCurrentWeek(offsetWeekState)
+        _stateFlow.value = _stateFlow.value.copy(loading = true, dates = dates)
+        getGroupScheduleForDay(group,dates[0])
     }
 
     private fun getGroupScheduleForDay(group: String, date: DateUi) {
@@ -81,25 +91,53 @@ class TimetableViewModel @Inject constructor(
         }
     }
 
-    private fun getCurrentWeek(): List<DateUi> {
+    private fun getCurrentWeek(offsetWeek: Int = 0): List<DateUi> {
         val dateFormat = SimpleDateFormat("dd")
         val timeZone = TimeZone.getTimeZone("Russia/Novosibirsk")
-        val startOfWeek = Calendar.getInstance(timeZone).apply {
+        val monday = Calendar.getInstance(timeZone).apply {
             firstDayOfWeek = Calendar.MONDAY
+            add(Calendar.DAY_OF_WEEK, offsetWeek)
             set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
         }.time
-        var dateStartOfWeek = dateFormat.format(startOfWeek).toInt()
+        val tuesday = Calendar.getInstance(timeZone).apply {
+            firstDayOfWeek = Calendar.MONDAY
+            add(Calendar.DAY_OF_WEEK, offsetWeek)
+            set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
+        }.time
+        val wednesday  = Calendar.getInstance(timeZone).apply {
+            firstDayOfWeek = Calendar.MONDAY
+            add(Calendar.DAY_OF_WEEK, offsetWeek)
+            set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
+        }.time
+        val thursday  = Calendar.getInstance(timeZone).apply {
+            firstDayOfWeek = Calendar.MONDAY
+            add(Calendar.DAY_OF_WEEK, offsetWeek)
+            set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
+        }.time
+        val friday  = Calendar.getInstance(timeZone).apply {
+            firstDayOfWeek = Calendar.MONDAY
+            add(Calendar.DAY_OF_WEEK, offsetWeek)
+            set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
+        }.time
+
+        val saturday  = Calendar.getInstance(timeZone).apply {
+            firstDayOfWeek = Calendar.MONDAY
+            add(Calendar.DAY_OF_WEEK, offsetWeek)
+            set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
+        }.time
+        var mondayDate = dateFormat.format(monday).toInt()
+        var tuesdayDate = dateFormat.format(tuesday).toInt()
+        var wednesdayDate = dateFormat.format(wednesday).toInt()
+        var thursdayDate = dateFormat.format(thursday).toInt()
+        var fridayDate = dateFormat.format(friday).toInt()
+        var saturdayDate = dateFormat.format(saturday).toInt()
         return listOf(
-            DateUi(
-                dayOfWeek = "Пн",
-                numberOfMonth = (dateStartOfWeek++).toString(),
-                clickable = true
-            ),
-            DateUi(dayOfWeek = "Вт", numberOfMonth = (dateStartOfWeek++).toString()),
-            DateUi(dayOfWeek = "Ср", numberOfMonth = (dateStartOfWeek++).toString()),
-            DateUi(dayOfWeek = "Чт", numberOfMonth = (dateStartOfWeek++).toString()),
-            DateUi(dayOfWeek = "Пт", numberOfMonth = (dateStartOfWeek++).toString()),
-            DateUi(dayOfWeek = "Сб", numberOfMonth = (dateStartOfWeek++).toString())
+            DateUi(dayOfWeek = "Пн", numberOfMonth = (mondayDate++).toString(), clickable = true),
+            DateUi(dayOfWeek = "Вт", numberOfMonth = (tuesdayDate++).toString()),
+            DateUi(dayOfWeek = "Ср", numberOfMonth = (wednesdayDate++).toString()),
+            DateUi(dayOfWeek = "Чт", numberOfMonth = (thursdayDate++).toString()),
+            DateUi(dayOfWeek = "Пт", numberOfMonth = (fridayDate++).toString()),
+            DateUi(dayOfWeek = "Сб", numberOfMonth = (saturdayDate++).toString())
         )
     }
 

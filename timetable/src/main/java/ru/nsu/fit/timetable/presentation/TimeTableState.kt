@@ -21,6 +21,7 @@ sealed class TimeTableEvent {
         val date: DateUi
     ) : TimeTableEvent()
 
+    class OnClickForwardWeek(val group : String, val offsetWeek : Int) : TimeTableEvent()
 }
 
 sealed class TimeTableCommand {}
