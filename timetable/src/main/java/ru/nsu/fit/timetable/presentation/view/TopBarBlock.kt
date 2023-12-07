@@ -8,12 +8,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,10 +31,11 @@ import androidx.compose.ui.unit.sp
 import ru.nsu.fit.timetable.R
 import ru.nsu.fit.timetable.presentation.TimeTableState
 import ru.nsu.fit.timetable.presentation.ui.theme.StaticBlack
+import ru.nsu.fit.timetable.presentation.ui.theme.StaticWhite
 import ru.nsu.fit.timetable.presentation.ui.theme.TopBarBackGround
 
 @Composable
-fun TopBarBlock(state: TimeTableState) {
+fun TopBarBlock(state: TimeTableState, onChangeTextWithNumberGroup: (String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,7 +44,7 @@ fun TopBarBlock(state: TimeTableState) {
         Row() {
             Column {
                 if (state.group.group != null) {
-                    GroupBlock(group = state.group.group)
+                    GroupBlock(group = state.group.group, onChangeTextWithNumberGroup)
                 }
                 DateBlock(state = state)
             }
@@ -56,12 +63,30 @@ fun TopBarBlock(state: TimeTableState) {
     }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GroupBlock(group: String) {
-    Row(modifier = Modifier.padding(start = 22.dp, top = 9.dp)) {
-        Text(text = group, style = TextStyle(fontSize = 18.sp))
-        Icon(Icons.Filled.ArrowDropDown, contentDescription = "image description")
-    }
+fun GroupBlock(group: String, onValueChange: (String) -> Unit) {
+    val message = remember { mutableStateOf(group) }
+        Row(modifier = Modifier.padding(start = 22.dp, top = 9.dp)) {
+            TextField(
+                modifier = Modifier.width(100.dp),
+                value = message.value,
+                onValueChange = { text ->
+                    message.value = text
+                    onValueChange(text)
+                },
+                textStyle = TextStyle(fontSize = 18.sp),
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor =  StaticWhite,
+                    unfocusedIndicatorColor = TopBarBackGround,
+                    focusedTextColor =  StaticWhite,
+                    unfocusedTextColor= StaticWhite,
+                    containerColor  = TopBarBackGround,
+                    cursorColor = StaticWhite)
+            )
+            Icon(Icons.Filled.ArrowDropDown, contentDescription = "image description")
+        }
 }
 
 @Composable

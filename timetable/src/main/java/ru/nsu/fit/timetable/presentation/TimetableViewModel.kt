@@ -1,12 +1,16 @@
 package ru.nsu.fit.timetable.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.nsu.fit.timetable.domain.ScheduleInteractorImpl
 import ru.nsu.fit.timetable.domain.models.mapToWeekDay
@@ -29,6 +33,22 @@ class TimetableViewModel @Inject constructor(
         MutableStateFlow(TimeTableState(dates = getCurrentWeek()))
     var stateFlow: StateFlow<TimeTableState> = _stateFlow
 
+    var sharedFlow: MutableSharedFlow<String> = MutableSharedFlow()
+
+    init {
+        onChangeNumberGroup()
+    }
+
+
+    private fun onChangeNumberGroup() {
+        sharedFlow
+            .filter { it.length == 5 }
+            .distinctUntilChanged()
+            .debounce(500L)
+            .onEach { getGroupScheduleForDay(it, _stateFlow.value.dates.first { date -> date.clickable }) }
+            .launchIn(viewModelScope)
+    }
+
     fun processEvent(event: TimeTableEvent) {
         when (event) {
             is TimeTableEvent.OnGetScheduleForDayClick -> getGroupScheduleForDay(
@@ -41,13 +61,21 @@ class TimetableViewModel @Inject constructor(
     private fun getGroupScheduleForDay(group: String, date: DateUi) {
         val dates = changeSelectedDate(_stateFlow.value.dates, date)
         _stateFlow.value = _stateFlow.value.copy(loading = true, dates = dates)
+        var numberLesson = 0
+        var currentLessonTime = ""
         viewModelScope.launch {
             scheduleInteractor.getUserWeekSchedule(group.toInt()).collect {
                 _stateFlow.value = _stateFlow.value.copy(
                     loading = false,
                     lessonsUi = it.getDaySchedule(date.dayOfWeek.mapToWeekDay())
-                        .map { lesson -> lesson.mapToLessonUi() },
-                    dates = dates
+                        .map { lesson ->
+                            if (currentLessonTime != lesson.startTime) {
+                                ++numberLesson
+                                currentLessonTime = lesson.startTime
+                            }
+                            lesson.mapToLessonUi(numberLesson)},
+                    dates = dates,
+                    group = TopBarUi(group = group)
                 )
             }
         }
@@ -90,33 +118,33 @@ class TimetableViewModel @Inject constructor(
     companion object {
         val listLesson = listOf<LessonUi>(
             LessonUi(
-                time = "9:00 - 10:35",
+                startTime = "9:00 - 10:35",
                 subject = "Мат.Анализ",
                 room = "3107",
                 typeLesson = LessonTypeUi.Lecture
             ),
             LessonUi(
-                time = "10:50 - 12:25",
+                startTime = "10:50 - 12:25",
                 subject = "Мат.Анализ",
                 room = "3205",
                 typeLesson = LessonTypeUi.Seminar
             ),
             LessonUi(
-                time = "12:40 - 14:15",
+                startTime = "12:40 - 14:15",
                 typeLesson = LessonTypeUi.WindowSchedule
             ),
             LessonUi(
-                time = "14:30 - 16:05",
+                startTime = "14:30 - 16:05",
                 typeLesson = LessonTypeUi.WindowSchedule
             ),
             LessonUi(
-                time = "16:20 - 18:05",
+                startTime = "16:20 - 18:05",
                 subject = "Мат.Анализ",
                 room = "3205",
                 typeLesson = LessonTypeUi.Seminar
             ),
             LessonUi(
-                time = "16:20 - 18:05",
+                startTime = "16:20 - 18:05",
                 subject = "Мат.Анализ",
                 room = "3205",
                 typeLesson = LessonTypeUi.Seminar

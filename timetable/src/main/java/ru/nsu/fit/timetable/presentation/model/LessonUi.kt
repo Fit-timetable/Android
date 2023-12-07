@@ -5,7 +5,8 @@ import ru.nsu.fit.timetable.presentation.view.LessonTypeUi
 
 data class LessonUi(
     var id: Int? = null,
-    var time: String = "",
+    var startTime: String = "",
+    var finishTime: String = "",
     var subject: String = "",
     var typeLesson: LessonTypeUi = LessonTypeUi.WindowSchedule,
     var room: String = "",
