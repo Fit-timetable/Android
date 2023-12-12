@@ -1,23 +1,23 @@
 package ru.nsu.fit.common
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 
 class FttRouter {
 
-    private val _currentScreen = MutableStateFlow<FttScreens>(FttScreens.AuthScreen)
-    val currentScreen: StateFlow<FttScreens>
+    private val _currentScreen = MutableSharedFlow<FttScreens>()
+    val currentScreen: SharedFlow<FttScreens>
         get() = _currentScreen
 
-    fun openAuthScreen() {
-        _currentScreen.value = FttScreens.AuthScreen
+    suspend fun openAuthScreen() {
+        _currentScreen.emit(FttScreens.AuthScreen)
     }
 
-    fun openScheduleScreen() {
-        _currentScreen.value = FttScreens.ScheduleScreen
+    suspend fun openScheduleScreen() {
+        _currentScreen.emit(FttScreens.ScheduleScreen)
     }
 
-    fun openRegisterScreen() {
-        _currentScreen.value = FttScreens.RegisterScreen
+    suspend fun openRegisterScreen() {
+        _currentScreen.emit(FttScreens.RegisterScreen)
     }
 }

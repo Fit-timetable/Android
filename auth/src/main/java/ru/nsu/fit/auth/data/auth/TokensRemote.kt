@@ -5,14 +5,17 @@ import ru.nsu.fit.common.Tokens
 
 @Serializable
 data class TokensRemote(
-    var authToken: String,
-    var authTokenExpire: String,
+    var accessToken: String,
+    var accessTokenExpiry: String,
     var refreshToken: String,
-    var refreshTokenExpire: String,
+    var refreshTokenExpiry: String,
 ) {
-    fun mapToTokens() : Tokens {
+    fun mapToTokens(): Tokens {
         return Tokens(
-            authToken, authTokenExpire, refreshToken, refreshTokenExpire
+            accessToken = accessToken,
+            accessTokenExpiry = accessTokenExpiry,
+            refreshToken = refreshToken,
+            refreshTokenExpiry = refreshTokenExpiry
         )
     }
 }

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,7 +23,13 @@ class RegisterFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                RegisterScreen(onClickConfirm = viewModel::sendRequest)
+                val state = viewModel.stateFlow.collectAsState()
+                RegisterScreen(
+                    Modifier,
+                    state.value,
+                    onClickConfirm = viewModel::sendRequest,
+                    viewModel::register
+                )
             }
         }
     }
