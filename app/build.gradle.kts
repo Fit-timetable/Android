@@ -63,6 +63,8 @@ kapt {
 
 dependencies {
     implementation(project(":timetable"))
+    implementation(project(":auth"))
+    implementation(project(":common"))
 
     //hilt
     implementation(libs.hilt.android)

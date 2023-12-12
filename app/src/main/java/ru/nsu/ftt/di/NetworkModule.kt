@@ -11,9 +11,11 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import ru.nsu.fit.auth.data.auth.AuthService
+import ru.nsu.fit.auth.data.register.RegisterService
 import ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.ScheduleService
-import ru.nsu.ftt.data.network.ApiSettings
-import ru.nsu.ftt.data.network.ApiSettings.Companion.TIME_OUT_DELAY
+import ru.nsu.fit.common.ApiSettings
+import ru.nsu.fit.common.ApiSettings.Companion.TIME_OUT_DELAY
 import ru.nsu.ftt.utils.AuthorizationInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
@@ -107,5 +109,15 @@ class NetworkModule {
     @Provides
     fun provideScheduleService(@Authorization retrofit: Retrofit): ScheduleService {
         return retrofit.create(ScheduleService::class.java)
+    }
+
+    @Provides
+    fun provideAuthService(@NonAuthorization retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
+    }
+
+    @Provides
+    fun provideRegisterService(@NonAuthorization retrofit: Retrofit): RegisterService {
+        return retrofit.create(RegisterService::class.java)
     }
 }

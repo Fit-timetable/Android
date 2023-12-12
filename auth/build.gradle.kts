@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.nsu.fit.timetable"
+    namespace = "ru.nsu.fit.auth"
     compileSdk = 34
 
     defaultConfig {

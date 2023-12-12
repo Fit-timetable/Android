@@ -9,7 +9,6 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentMain"
-        android:name="ru.nsu.fit.timetable.presentation.TimeTableFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
