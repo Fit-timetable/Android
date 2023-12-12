@@ -14,11 +14,14 @@ import ru.nsu.fit.timetable.presentation.ui.theme.ScreenBackGround
 
 
 @Composable
-fun TimeTableScreen(state: TimeTableState, onClickDate: (group: String, date: DateUi) -> Unit) {
+fun TimeTableScreen(state: TimeTableState,
+                    onClickDate: (group: String, date: DateUi) -> Unit,
+                    onChangeTextWithNumberGroup : (String) -> Unit,
+                    onClickForward: (group: String, offsetWeek: Int) -> Unit) {
     Box(modifier = Modifier.background(ScreenBackGround)) {
         Column {
-            TopBarBlock(state = state)
-            DayOfWeekBlock(state = state, onClickDate)
+            TopBarBlock(state = state, onChangeTextWithNumberGroup = onChangeTextWithNumberGroup)
+            DayOfWeekBlock(state = state, onClickDate, onClickForward)
             LessonBlock(state = state)
         }
     }
@@ -34,39 +37,39 @@ fun FullScreenPreview() {
         group = group,
         dates = listOf(DateUi("Пн", "20", false))
     )
-    TimeTableScreen(state = state, onClickDate = { _, _ -> })
+    //TimeTableScreen(state = state, onClickDate = { _, _ -> })
 }
 
 val listLesson: List<LessonUi>
     get() = listOf<LessonUi>(
         LessonUi(
-            time = "9:00 - 10:35",
+            startTime = "9:00 - 10:35",
             subject = "Мат.Анализ",
             room = "3107",
             typeLesson = LessonTypeUi.Lecture
         ),
         LessonUi(
-            time = "10:50 - 12:25",
+            startTime = "10:50 - 12:25",
             subject = "Мат.Анализ",
             room = "3205",
             typeLesson = LessonTypeUi.Seminar
         ),
         LessonUi(
-            time = "12:40 - 14:15",
+            startTime = "12:40 - 14:15",
             typeLesson = LessonTypeUi.WindowSchedule
         ),
         LessonUi(
-            time = "14:30 - 16:05",
+            startTime = "14:30 - 16:05",
             typeLesson = LessonTypeUi.WindowSchedule
         ),
         LessonUi(
-            time = "16:20 - 18:05",
+            startTime = "16:20 - 18:05",
             subject = "Мат.Анализ",
             room = "3205",
             typeLesson = LessonTypeUi.Seminar
         ),
         LessonUi(
-            time = "16:20 - 18:05",
+            startTime = "16:20 - 18:05",
             subject = "Мат.Анализ",
             room = "3205",
             typeLesson = LessonTypeUi.Seminar

@@ -28,7 +28,7 @@ fun LessonRemote.mapToLesson(): Lesson {
         this.parity = this@mapToLesson.parity ?: LessonParity.ALWAYS
         this.place = this@mapToLesson.place?.mapToPlace() ?: place {  }
         this.startTime = this@mapToLesson.startTime
-//        this.finishTime
+        this.finishTime = this@mapToLesson.finishTime
         this.subject = this@mapToLesson.subject ?: ""
         this.teacher = this@mapToLesson.teacher ?: ""
         this.lessonType = this@mapToLesson.type

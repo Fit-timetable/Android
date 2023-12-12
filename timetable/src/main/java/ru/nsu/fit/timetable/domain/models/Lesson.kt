@@ -4,6 +4,7 @@ data class Lesson(
     var id: Int? = 0,
     var place: Place = place { },
     var startTime: String = "",
+    var finishTime:  String = "",
     var subject: String = "",
     var teacher: String = "",
     var lessonType: LessonType = LessonType.LECTURE,

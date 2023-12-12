@@ -9,7 +9,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import ru.nsu.fit.timetable.presentation.model.DateUi
 import ru.nsu.fit.timetable.presentation.view.TimeTableScreen
 
@@ -25,12 +27,27 @@ class TimeTableFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val state = timeTableViewModel.stateFlow.collectAsState()
-                TimeTableScreen(state = state.value, onClickDate = ::onClickDate)
+                TimeTableScreen(
+                    state = state.value,
+                    onClickDate = ::onClickDate,
+                    onChangeTextWithNumberGroup = ::onChaneNumberGroup,
+                    onClickForward = ::onClickForwardWeek
+                )
             }
         }
     }
 
     private fun onClickDate(group: String, date: DateUi) {
         timeTableViewModel.processEvent(TimeTableEvent.OnGetScheduleForDayClick(group, date))
+    }
+
+    private fun onChaneNumberGroup(group: String) {
+        lifecycleScope.launch {
+            timeTableViewModel.sharedFlow.emit(group)
+        }
+    }
+
+    private fun onClickForwardWeek(group: String, offsetWeek : Int) {
+        timeTableViewModel.processEvent(TimeTableEvent.OnClickForwardWeek(group, offsetWeek))
     }
 }

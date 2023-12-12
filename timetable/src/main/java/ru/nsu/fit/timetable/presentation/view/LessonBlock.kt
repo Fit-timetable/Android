@@ -66,6 +66,7 @@ fun LessonBlock(
         .animateContentSize(),
     verticalArrangement = Arrangement.spacedBy(5.dp)
 ) {
+    var currentTime:  String = ""
     itemsIndexed(state.lessonsUi) { index, lesson ->
         val color = when (lesson.typeLesson) {
             LessonTypeUi.Lecture -> LectureBackGround
@@ -73,7 +74,7 @@ fun LessonBlock(
             LessonTypeUi.WindowSchedule -> WindowScheduleBackGround
         }
         Column {
-            LessonUiTimeInfo(time = lesson.time)
+           currentTime =  LessonUiTimeInfo(startTime = lesson.startTime, finishTime = lesson.finishTime, currentTime = currentTime)
         LessonBackgroundCard(
             modifier = modifier.clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -120,13 +121,26 @@ fun LessonBlock(
 }
 
 @Composable
-fun LessonUiTimeInfo(modifier: Modifier = Modifier, time: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Divider(modifier = modifier.weight(2f), thickness = 2.dp, color = DividerColor)
-        Text(modifier = modifier
-            .padding(horizontal = 6.dp), text = time, color = TextDividerColor)
-        Divider(modifier = modifier.weight(2f), thickness = 2.dp, color = DividerColor)
+fun LessonUiTimeInfo(modifier: Modifier = Modifier, startTime: String, finishTime: String, currentTime: String) : String {
+    if (currentTime != startTime) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Divider(modifier = modifier.weight(2f), thickness = 2.dp, color = DividerColor)
+            Text(
+                modifier = modifier
+                    .padding(start = 6.dp), text = startTime, color = TextDividerColor
+            )
+            Text(
+                modifier = modifier
+                    .padding(horizontal = 1.dp), text = "-", color = TextDividerColor
+            )
+            Text(
+                modifier = modifier
+                    .padding(end = 6.dp), text = finishTime, color = TextDividerColor
+            )
+            Divider(modifier = modifier.weight(2f), thickness = 2.dp, color = DividerColor)
+        }
     }
+    return startTime
 }
 
 @Composable
@@ -154,15 +168,17 @@ fun LessonUiDescription(modifier: Modifier, lesson: LessonUi) {
         modifier = modifier
             .fillMaxHeight()
             .padding(start = 15.dp),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         Text(
+            modifier = Modifier.padding(top = 10.dp),
             text = lesson.subject, style = TextStyle(
-                fontSize = 10.sp,
+                fontSize = 20.sp,
                 color = StaticBlack
             )
         )
         Text(
+            modifier = Modifier.padding(top = 20.dp),
             text = lesson.room, style = TextStyle(
                 fontSize = 20.sp,
                 color = StaticBlack
