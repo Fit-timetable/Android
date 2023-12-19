@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ru.nsu.fit.auth.presentation.auth.view.AuthScreen
+import ru.nsu.fit.auth.presentation.theme.FTTTheme
 
 @AndroidEntryPoint
 class AuthFragment : Fragment() {
@@ -22,12 +23,14 @@ class AuthFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val state = viewModel.stateFlow.collectAsState()
-                AuthScreen(
-                    state = state.value,
-                    onClickAuth = viewModel::auth,
-                    onClickRegister = viewModel::onRegister
-                )
+                FTTTheme {
+                    val state = viewModel.stateFlow.collectAsState()
+                    AuthScreen(
+                        state = state.value,
+                        onClickAuth = viewModel::auth,
+                        onClickRegister = viewModel::onRegister
+                    )
+                }
             }
         }
     }

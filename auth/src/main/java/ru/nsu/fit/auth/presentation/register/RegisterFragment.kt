@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ru.nsu.fit.auth.presentation.register.view.RegisterScreen
+import ru.nsu.fit.auth.presentation.theme.FTTTheme
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
@@ -23,13 +24,15 @@ class RegisterFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val state = viewModel.stateFlow.collectAsState()
-                RegisterScreen(
-                    Modifier,
-                    state.value,
-                    onClickConfirm = viewModel::sendRequest,
-                    viewModel::register
-                )
+                FTTTheme {
+                    val state = viewModel.stateFlow.collectAsState()
+                    RegisterScreen(
+                        Modifier,
+                        state.value,
+                        onClickConfirm = viewModel::sendRequest,
+                        viewModel::register
+                    )
+                }
             }
         }
     }

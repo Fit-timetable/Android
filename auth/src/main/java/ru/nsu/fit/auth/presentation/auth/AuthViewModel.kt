@@ -33,6 +33,7 @@ class AuthViewModel @Inject constructor(
                 Log.d("FTT_TAG", "auth success")
             }.getOrElse {
                 Log.d("FTT_TAG", "auth failed ${it.stackTraceToString()}")
+                router.sendToast("Ошибка авторизации")
                 _stateFlow.emit(state.copy(loading = false, error = it.message))
             }
         }

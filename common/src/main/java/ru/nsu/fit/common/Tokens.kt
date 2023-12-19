@@ -1,19 +1,19 @@
 package ru.nsu.fit.common
 
-import java.sql.Time
 import java.util.Calendar
+import java.util.Date
 
 data class Tokens(
     var accessToken: String = "",
-    var accessTokenExpiry: String = "",
+    var accessTokenExpiry: Date = Date(),
     var refreshToken: String = "",
-    var refreshTokenExpiry: String = "",
+    var refreshTokenExpiry: Date = Date(),
 ) {
-    fun isRefreshTokenAvailable() : Boolean {
-        return Time.valueOf(refreshTokenExpiry).after(Calendar.getInstance().time)
+    fun isRefreshTokenAvailable(): Boolean {
+        return refreshTokenExpiry.after(Calendar.getInstance().time)
     }
 
-    fun isAuthTokenAvailable() : Boolean {
-        return Time.valueOf(accessTokenExpiry).after(Calendar.getInstance().time)
+    fun isAuthTokenAvailable(): Boolean {
+        return accessTokenExpiry.after(Calendar.getInstance().time)
     }
 }
