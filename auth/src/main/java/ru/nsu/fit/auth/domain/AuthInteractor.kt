@@ -14,8 +14,9 @@ class AuthInteractor @Inject constructor(
     }
 
     suspend fun authRefresh() {
-        if (apiSettings.tokens.isRefreshTokenAvailable())
-            authRepository.authRefresh(apiSettings.tokens.refreshToken)
+        val result = authRepository.authRefresh(apiSettings.tokens.refreshToken)
+        apiSettings.tokens.accessToken = result.authToken
+        apiSettings.tokens.accessTokenExpiry = result.authTokenExpire
     }
 
     suspend fun logout() {

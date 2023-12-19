@@ -5,9 +5,13 @@ import kotlinx.coroutines.flow.SharedFlow
 
 class FttRouter {
 
-    private val _currentScreen = MutableSharedFlow<FttScreens>()
+    private val _currentScreen = MutableSharedFlow<FttScreens>(extraBufferCapacity = 6)
     val currentScreen: SharedFlow<FttScreens>
         get() = _currentScreen
+
+    private val _toastFlow = MutableSharedFlow<String>(extraBufferCapacity = 6)
+    val toastFlow: SharedFlow<String>
+        get() = _toastFlow
 
     suspend fun openAuthScreen() {
         _currentScreen.emit(FttScreens.AuthScreen)
@@ -19,5 +23,10 @@ class FttRouter {
 
     suspend fun openRegisterScreen() {
         _currentScreen.emit(FttScreens.RegisterScreen)
+    }
+
+
+    fun sendToast(message: String) {
+        _toastFlow.tryEmit(message)
     }
 }

@@ -39,6 +39,7 @@ class RegisterViewModel @Inject constructor(
                 Log.d("FTT_TAG", "request signup success")
             }.onFailure {
                 Log.d("FTT_TAG", "error loading ${it.stackTraceToString()}")
+                router.sendToast("Ошибка запроса регистрации")
                 _stateFlow.emit(state.copy(loading = false, error = "Can't connect to host"))
             }
         }
@@ -60,6 +61,7 @@ class RegisterViewModel @Inject constructor(
                 router.openAuthScreen()
             }.onFailure {
                 Log.d("FTT_TAG", "error loading ${it.stackTraceToString()}")
+                router.sendToast("Ошибка регистрации")
                 _stateFlow.emit(state.copy(loading = false, error = "Can't connect to host"))
             }
         }

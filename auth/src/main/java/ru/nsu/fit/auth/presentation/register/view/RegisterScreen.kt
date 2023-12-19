@@ -1,16 +1,16 @@
 package ru.nsu.fit.auth.presentation.register.view
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,8 +25,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.nsu.fit.auth.presentation.register.RegisterState
-import ru.nsu.fit.auth.presentation.theme.ProgressBar
-import ru.nsu.fit.auth.presentation.theme.ProgrssBapBackground
+import ru.nsu.fit.auth.presentation.theme.FTTTheme
 import ru.nsu.fit.auth.presentation.theme.ScreenBackGround
 
 @Composable
@@ -42,16 +41,6 @@ fun RegisterScreen(
             .fillMaxHeight(),
         contentAlignment = Alignment.Center,
     ) {
-        if (state.loading) {
-            LinearProgressIndicator(
-                modifier = modifier
-                    .align(Alignment.TopCenter)
-                    .fillMaxWidth(1F)
-                    .height(5.dp),
-                color = ProgressBar,
-                trackColor = ProgrssBapBackground
-            )
-        }
         Column {
             var email by remember { mutableStateOf("") }
             var password by remember { mutableStateOf("") }
@@ -71,10 +60,8 @@ fun RegisterScreen(
                         label = { Text("Email") }
                     )
 
-                    OutlinedButton(
-                        modifier = Modifier.padding(top = 5.dp),
-                        onClick = { onClickConfirm(email) }) {
-                        Text(text = "Отправить")
+                    ButtonWithLoader(modifier, state, "Отправить") {
+                        onClickConfirm(email)
                     }
                 }
             }
@@ -99,10 +86,8 @@ fun RegisterScreen(
                         label = { Text("Confirm code") }
                     )
 
-                    OutlinedButton(
-                        modifier = Modifier.padding(top = 5.dp),
-                        onClick = { onClickRegister(email, password, confirmCode) }) {
-                        Text(text = "Отправить")
+                    ButtonWithLoader(modifier.padding(top = 5.dp), state, "Отправить") {
+                        onClickRegister(email, password, confirmCode)
                     }
                 }
             }
@@ -111,8 +96,37 @@ fun RegisterScreen(
 }
 
 @Composable
+fun ButtonWithLoader(
+    modifier: Modifier = Modifier,
+    state: RegisterState,
+    buttonText: String,
+    onClick: () -> Unit
+) {
+    var progressIndicatorVisible by remember { mutableStateOf(false) }
+    progressIndicatorVisible = state.loading
+    Button(
+        onClick = { onClick() },
+        modifier = modifier.animateContentSize()
+    ) {
+        if (progressIndicatorVisible) {
+            CircularProgressIndicator(
+                color = ScreenBackGround,
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(15.dp)
+            )
+        }
+        Text(
+            buttonText,
+            modifier = Modifier.padding(start = if (progressIndicatorVisible) 8.dp else 0.dp)
+        )
+    }
+}
+
+@Composable
 @Preview
 fun PreviewRegisterScreen() {
     val state = RegisterState()
-    RegisterScreen(Modifier, state, { _ -> }, { _, _, _ -> })
+    FTTTheme {
+        RegisterScreen(Modifier, state, { _ -> }, { _, _, _ -> })
+    }
 }

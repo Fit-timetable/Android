@@ -3,6 +3,7 @@ package ru.nsu.ftt
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     internal lateinit var router: FttRouter
+    @Inject
+    internal lateinit var viewModel: ActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,12 @@ class MainActivity : AppCompatActivity() {
                 launch {
                     monitoringRouter()
                 }
+                launch {
+                    monitoringRouterToasts()
+                }
+                launch {
+                    viewModel.reAuth()
+                }
             }
         }
 
@@ -46,10 +55,6 @@ class MainActivity : AppCompatActivity() {
                 .setReorderingAllowed(true)
                 .commit()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     private fun CoroutineScope.monitoringRouter() {
@@ -74,6 +79,14 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun CoroutineScope.monitoringRouterToasts() {
+        launch {
+            router.toastFlow.collect {
+                Toast.makeText(this@MainActivity, it, Toast.LENGTH_LONG).show()
             }
         }
     }
