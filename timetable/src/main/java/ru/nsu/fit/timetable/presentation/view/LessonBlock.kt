@@ -233,7 +233,7 @@ fun TypeLessonBlock(type: String) {
 fun LessonBlockPreview() {
     val state = TimeTableState(
         loading = false,
-        error = null,
+        error = "",
         lessonsUi = listLesson,
         group = group,
         dates = dates

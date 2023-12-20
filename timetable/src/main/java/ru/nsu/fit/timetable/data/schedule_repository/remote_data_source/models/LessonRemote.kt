@@ -12,7 +12,7 @@ data class LessonRemote(
     var teacher: String? = "",
     var startTime: String = "",
     var finishTime: String = "",
-    var type: LessonType = LessonType.SEMINAR,
+    var type: LessonType? = LessonType.SEMINAR,
     var parity: LessonParity? = LessonParity.ALWAYS,
 )
 
