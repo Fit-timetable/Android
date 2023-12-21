@@ -15,17 +15,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,12 +37,15 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import ru.nsu.fit.timetable.R
 import ru.nsu.fit.timetable.presentation.TimeTableState
 import ru.nsu.fit.timetable.presentation.model.LessonUi
+import ru.nsu.fit.timetable.presentation.ui.theme.BackGroundDate
 import ru.nsu.fit.timetable.presentation.ui.theme.CardBackGround
 import ru.nsu.fit.timetable.presentation.ui.theme.DividerColor
 import ru.nsu.fit.timetable.presentation.ui.theme.LectureBackGround
@@ -46,6 +53,7 @@ import ru.nsu.fit.timetable.presentation.ui.theme.SeminarBackGround
 import ru.nsu.fit.timetable.presentation.ui.theme.StaticBlack
 import ru.nsu.fit.timetable.presentation.ui.theme.StaticWhite
 import ru.nsu.fit.timetable.presentation.ui.theme.TextDividerColor
+import ru.nsu.fit.timetable.presentation.ui.theme.TopBarBackGround
 import ru.nsu.fit.timetable.presentation.ui.theme.WindowScheduleBackGround
 
 enum class LessonTypeUi {
@@ -60,58 +68,88 @@ fun LessonBlock(
     modifier: Modifier = Modifier,
     state: TimeTableState,
     onCardClick: (LessonUi) -> Unit = { _ -> }
-) = LazyColumn(
-    modifier = Modifier
-        .padding(horizontal = 10.dp)
-        .animateContentSize(),
-    verticalArrangement = Arrangement.spacedBy(5.dp)
-) {
-    var currentTime:  String = ""
-    itemsIndexed(state.lessonsUi) { index, lesson ->
-        val color = when (lesson.typeLesson) {
-            LessonTypeUi.Lecture -> LectureBackGround
-            LessonTypeUi.Seminar -> SeminarBackGround
-            LessonTypeUi.WindowSchedule -> WindowScheduleBackGround
-        }
-        Column {
-           currentTime =  LessonUiTimeInfo(startTime = lesson.startTime, finishTime = lesson.finishTime, currentTime = currentTime)
-        LessonBackgroundCard(
-            modifier = modifier.clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(bounded = true, color = color),
-            ) { onCardClick(lesson) }
-        ) {
-                Row(
-                    modifier = modifier.fillMaxWidth()
+)  {
+    val openDialog = remember { mutableStateOf(false) }
+    LazyColumn(
+        modifier = Modifier
+            .padding(horizontal = 10.dp)
+            .animateContentSize(),
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        var currentTime:  String = ""
+        itemsIndexed(state.lessonsUi) { index, lesson ->
+            val color = when (lesson.typeLesson) {
+                LessonTypeUi.Lecture -> LectureBackGround
+                LessonTypeUi.Seminar -> SeminarBackGround
+                LessonTypeUi.WindowSchedule -> WindowScheduleBackGround
+            }
+            Column(modifier = Modifier.clickable { openDialog.value = true }) {
+                if (openDialog.value) {
+                        Dialog(onDismissRequest = { openDialog.value = false }) {
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                                    .padding(16.dp)
+                                    .background(TopBarBackGround),
+                                shape = RoundedCornerShape(16.dp),
+                            ) {
+                            Column(modifier = Modifier.background(TopBarBackGround)) {
+                                Text(
+                                    text = "Ближайшее дз: \n \n \n \n Материалы по предмету: \n",
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .size(20.dp)
+                                        .wrapContentSize(Alignment.Center),
+                                    textAlign = TextAlign.Center,
+                                    color = StaticWhite
+                                )
+                                Button(onClick = { openDialog.value = false }) {
+                                    Text("Close", color = StaticWhite)
+                                }
+                            }
+                        }
+                    }
+                }
+                currentTime =  LessonUiTimeInfo(startTime = lesson.startTime, finishTime = lesson.finishTime, currentTime = currentTime)
+                LessonBackgroundCard(
+                    modifier = modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(bounded = true, color = color),
+                    ) { openDialog.value = true }
                 ) {
-                    LessonUiInfo(
-                        modifier
-                            .fillParentMaxHeight()
-                            .background(color),
-                        lesson,
-                    )
-                    if (lesson.typeLesson == LessonTypeUi.WindowSchedule) return@Row
-                    LessonUiDescription(modifier, lesson)
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        if (lesson.room == "Google Meet") {
+                    Row(
+                        modifier = modifier.fillMaxWidth()
+                    ) {
+                        LessonUiInfo(
+                            modifier
+                                .fillParentMaxHeight()
+                                .background(color),
+                            lesson,
+                        )
+                        if (lesson.typeLesson == LessonTypeUi.WindowSchedule) return@Row
+                        LessonUiDescription(modifier, lesson)
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            if (lesson.room == "Google Meet") {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.TopEnd
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_meting),
+                                        contentDescription = "image description"
+                                    )
+                                }
+                            }
                             Box(
                                 modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.TopEnd
+                                contentAlignment = Alignment.BottomEnd
                             ) {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.ic_meting),
+                                    painter = painterResource(id = R.drawable.ic_infromation),
                                     contentDescription = "image description"
                                 )
                             }
-                        }
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.BottomEnd
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_infromation),
-                                contentDescription = "image description"
-                            )
                         }
                     }
                 }
