@@ -8,6 +8,6 @@ data class ApiSettings(
     var tokens: Tokens = Tokens()
 ) {
     companion object {
-        public const val TIME_OUT_DELAY = 10L
+        public const val TIME_OUT_DELAY = 15L
     }
 }
