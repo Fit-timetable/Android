@@ -8,9 +8,12 @@ import java.util.Date
 @Serializable
 data class TokensRemote(
     var accessToken: String,
+
     @Serializable(with = KSerializerDate::class)
     var accessTokenExpiry: Date,
+
     var refreshToken: String,
+
     @Serializable(with = KSerializerDate::class)
     var refreshTokenExpiry: Date,
 ) {

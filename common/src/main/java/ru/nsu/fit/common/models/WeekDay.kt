@@ -1,4 +1,4 @@
-package ru.nsu.fit.timetable.domain.models
+package ru.nsu.fit.common.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

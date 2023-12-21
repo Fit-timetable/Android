@@ -4,6 +4,7 @@ package ru.nsu.ftt
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -18,6 +19,7 @@ import ru.nsu.fit.common.FttRouter
 import ru.nsu.fit.common.FttScreens
 import ru.nsu.fit.timetable.presentation.TimeTableFragment
 import ru.nsu.ftt.databinding.ActivityMainBinding
+import ru.nsu.ftt.edit_lesson.presentation.EditLessonFragment
 import javax.inject.Inject
 
 
@@ -28,8 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     internal lateinit var router: FttRouter
-    @Inject
-    internal lateinit var viewModel: ActivityViewModel
+
+    private val viewModel: ActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
+//                    replaceCurrentFragment("ASD", false) {
+//                        EditLessonFragment.newInstance(false)
+//                    }
                     monitoringRouter()
                 }
                 launch {
@@ -78,6 +83,17 @@ class MainActivity : AppCompatActivity() {
                             TimeTableFragment()
                         }
                     }
+
+                    FttScreens.Back -> {
+                        supportFragmentManager.popBackStack()
+                    }
+
+                    FttScreens.CreateLessonScreen -> {
+                        replaceCurrentFragment("CreateLessonScreen", true) {
+                            EditLessonFragment.newInstance(false)
+                        }
+                    }
+
                 }
             }
         }

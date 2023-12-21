@@ -22,7 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import ru.nsu.fit.auth.presentation.register.RegisterState
 import ru.nsu.fit.auth.presentation.theme.FTTTheme
@@ -35,12 +38,19 @@ fun RegisterScreen(
     onClickConfirm: (mail: String) -> Unit,
     onClickRegister: (mail: String, pass: String, code: String) -> Unit
 ) {
+
     BoxWithConstraints(
         modifier = modifier
             .background(ScreenBackGround)
             .fillMaxHeight(),
         contentAlignment = Alignment.Center,
     ) {
+        Text(
+            modifier = Modifier.padding(bottom = 400.dp),
+            text = "Fit TimeTable",
+            fontSize = TextUnit(30F, TextUnitType.Sp),
+            textAlign = TextAlign.Center
+        )
         Column {
             var email by remember { mutableStateOf("") }
             var password by remember { mutableStateOf("") }

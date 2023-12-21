@@ -14,7 +14,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 class KSerializerDate : KSerializer<Date> {
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US).apply {
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
 
@@ -23,7 +23,7 @@ class KSerializerDate : KSerializer<Date> {
 
     override fun deserialize(decoder: Decoder): Date {
         return try {
-            requireNotNull(dateFormat.parse(decoder.toString()))
+            requireNotNull(dateFormat.parse(decoder.decodeString()))
         } catch (e: ParseException) {
             throw SerializationException(e)
         }

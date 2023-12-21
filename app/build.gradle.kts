@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
+    implementation(project(mapOf("path" to ":editlesson")))
     kapt(libs.hilt.android.compiler)
 
     // retrofit
@@ -85,6 +86,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     //androidX
+    implementation(libs.androidx.lifecycle.extensions)
     implementation(libs.androidx.core)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity.compose)

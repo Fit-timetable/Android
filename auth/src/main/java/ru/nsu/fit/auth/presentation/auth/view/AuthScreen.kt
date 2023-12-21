@@ -26,7 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import ru.nsu.fit.auth.presentation.auth.AuthState
 import ru.nsu.fit.auth.presentation.theme.ScreenBackGround
@@ -43,9 +46,21 @@ fun AuthScreen(
             .fillMaxHeight(),
         contentAlignment = Alignment.Center,
     ) {
+        Text(
+            modifier = Modifier.padding(bottom = 400.dp),
+            text = "Fit TimeTable",
+            fontSize = TextUnit(30F, TextUnitType.Sp),
+            textAlign = TextAlign.Center
+        )
+        Text(
+            modifier = Modifier.padding(bottom = 300.dp),
+            text = "Now your finances are in one place and\nalways under control",
+            textAlign = TextAlign.Center
+        )
+
         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-            var email by remember { mutableStateOf("") }
-            var password by remember { mutableStateOf("") }
+            var email by remember { mutableStateOf("y.kurgin@g.nsu.ru") }
+            var password by remember { mutableStateOf("12345678") }
             OutlinedTextField(
                 value = email,
                 onValueChange = {

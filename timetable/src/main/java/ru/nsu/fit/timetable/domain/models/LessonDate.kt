@@ -1,5 +1,6 @@
 package ru.nsu.fit.timetable.domain.models
 
+import ru.nsu.fit.common.models.WeekDay
 import java.sql.Time
 
 data class LessonDate(

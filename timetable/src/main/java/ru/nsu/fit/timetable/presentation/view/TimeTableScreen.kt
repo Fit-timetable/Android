@@ -18,11 +18,16 @@ fun TimeTableScreen(
     state: TimeTableState,
     onClickDate: (group: String, date: DateUi) -> Unit,
     onChangeTextWithNumberGroup: (String) -> Unit,
-    onClickForward: (group: String, offsetWeek: Int) -> Unit
+    onClickForward: (group: String, offsetWeek: Int) -> Unit,
+    onAddClick: () -> Unit = {}
 ) {
     Box(modifier = Modifier.background(ScreenBackGround)) {
         Column {
-            TopBarBlock(state = state, onChangeTextWithNumberGroup = onChangeTextWithNumberGroup)
+            TopBarBlock(
+                state = state,
+                onChangeTextWithNumberGroup = onChangeTextWithNumberGroup,
+                onAddClick
+            )
             DayOfWeekBlock(state = state, onClickDate, onClickForward)
             if (state.error.isEmpty()) {
                 LessonBlock(state = state)

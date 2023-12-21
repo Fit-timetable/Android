@@ -25,6 +25,14 @@ class FttRouter {
         _currentScreen.emit(FttScreens.RegisterScreen)
     }
 
+    suspend fun back() {
+        _currentScreen.emit(FttScreens.Back)
+    }
+
+    suspend fun openCreateLessonScreen() {
+        _currentScreen.emit(FttScreens.CreateLessonScreen)
+    }
+
 
     fun sendToast(message: String) {
         _toastFlow.tryEmit(message)

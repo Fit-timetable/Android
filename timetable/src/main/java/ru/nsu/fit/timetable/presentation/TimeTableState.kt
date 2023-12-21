@@ -11,7 +11,7 @@ data class TimeTableState(
     val group: TopBarUi = TopBarUi(
         group = "20201"
     ),
-    val dates: List<DateUi>
+    val dates: List<DateUi> = listOf()
 )
 
 

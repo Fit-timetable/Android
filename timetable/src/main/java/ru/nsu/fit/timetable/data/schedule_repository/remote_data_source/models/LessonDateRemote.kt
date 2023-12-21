@@ -1,7 +1,7 @@
 package ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.models
 
 import kotlinx.serialization.Serializable
-import ru.nsu.fit.timetable.domain.models.WeekDay
+import ru.nsu.fit.common.models.WeekDay
 
 @Serializable
 data class LessonDateRemote(

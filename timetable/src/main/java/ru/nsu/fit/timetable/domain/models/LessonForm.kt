@@ -1,5 +1,7 @@
 package ru.nsu.fit.timetable.domain.models
 
+import ru.nsu.fit.common.models.LessonType
+
 class LessonForm(
     val evenWeeksOnly: Boolean = false,
     val oddWeeksOnly: Boolean = false,

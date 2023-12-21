@@ -1,9 +1,8 @@
 package ru.nsu.fit.auth.domain
 
 import ru.nsu.fit.common.ApiSettings
-import javax.inject.Inject
 
-class AuthInteractor @Inject constructor(
+class AuthInteractor(
     private val authRepository: AuthRepository,
     private val registerRepository: RegisterRepository,
     private val apiSettings: ApiSettings,

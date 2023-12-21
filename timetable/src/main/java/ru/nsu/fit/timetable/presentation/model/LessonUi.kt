@@ -1,6 +1,7 @@
 package ru.nsu.fit.timetable.presentation.model
 
-import ru.nsu.fit.timetable.domain.models.LessonParity
+import ru.nsu.fit.common.models.LessonParity
+import ru.nsu.fit.common.models.LessonType
 import ru.nsu.fit.timetable.presentation.view.LessonTypeUi
 
 data class LessonUi(
@@ -17,3 +18,12 @@ data class LessonUi(
 )
 
 fun lessonUi(block: LessonUi.() -> Unit) = LessonUi().apply(block)
+
+fun LessonType.mapToLessonTypeUi(): LessonTypeUi {
+    return when (this) {
+        LessonType.LECTURE -> LessonTypeUi.Lecture
+        LessonType.SEMINAR -> LessonTypeUi.Seminar
+        LessonType.PRACTICE -> LessonTypeUi.Seminar
+        LessonType.WINDOW -> LessonTypeUi.WindowSchedule
+    }
+}

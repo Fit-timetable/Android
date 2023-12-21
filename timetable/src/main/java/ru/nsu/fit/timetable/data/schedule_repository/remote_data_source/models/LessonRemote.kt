@@ -1,8 +1,8 @@
 package ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.models
 
 import kotlinx.serialization.Serializable
-import ru.nsu.fit.timetable.domain.models.LessonParity
-import ru.nsu.fit.timetable.domain.models.LessonType
+import ru.nsu.fit.common.models.LessonParity
+import ru.nsu.fit.common.models.LessonType
 
 @Serializable
 data class LessonRemote(
