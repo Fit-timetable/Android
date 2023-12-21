@@ -14,15 +14,21 @@ import ru.nsu.fit.timetable.presentation.ui.theme.ScreenBackGround
 
 
 @Composable
-fun TimeTableScreen(state: TimeTableState,
-                    onClickDate: (group: String, date: DateUi) -> Unit,
-                    onChangeTextWithNumberGroup : (String) -> Unit,
-                    onClickForward: (group: String, offsetWeek: Int) -> Unit) {
+fun TimeTableScreen(
+    state: TimeTableState,
+    onClickDate: (group: String, date: DateUi) -> Unit,
+    onChangeTextWithNumberGroup: (String) -> Unit,
+    onClickForward: (group: String, offsetWeek: Int) -> Unit
+) {
     Box(modifier = Modifier.background(ScreenBackGround)) {
         Column {
             TopBarBlock(state = state, onChangeTextWithNumberGroup = onChangeTextWithNumberGroup)
             DayOfWeekBlock(state = state, onClickDate, onClickForward)
-            LessonBlock(state = state)
+            if (state.error.isEmpty()) {
+                LessonBlock(state = state)
+            } else {
+                ErrorBlock(error = state.error)
+            }
         }
     }
 }
@@ -32,7 +38,7 @@ fun TimeTableScreen(state: TimeTableState,
 fun FullScreenPreview() {
     val state = TimeTableState(
         loading = false,
-        error = null,
+        error = "",
         lessonsUi = listLesson,
         group = group,
         dates = listOf(DateUi("Пн", "20", false))

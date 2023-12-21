@@ -7,6 +7,7 @@ import ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.models.W
 import ru.nsu.fit.timetable.domain.models.Lesson
 import ru.nsu.fit.timetable.domain.models.LessonDate
 import ru.nsu.fit.timetable.domain.models.LessonParity
+import ru.nsu.fit.timetable.domain.models.LessonType
 import ru.nsu.fit.timetable.domain.models.Place
 import ru.nsu.fit.timetable.domain.models.WeekSchedule
 import ru.nsu.fit.timetable.domain.models.lesson
@@ -31,7 +32,7 @@ fun LessonRemote.mapToLesson(): Lesson {
         this.finishTime = this@mapToLesson.finishTime
         this.subject = this@mapToLesson.subject ?: ""
         this.teacher = this@mapToLesson.teacher ?: ""
-        this.lessonType = this@mapToLesson.type
+        this.lessonType = this@mapToLesson.type ?: LessonType.WINDOW
     }
 }
 

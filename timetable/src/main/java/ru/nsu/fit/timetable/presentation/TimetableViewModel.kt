@@ -1,5 +1,6 @@
 package ru.nsu.fit.timetable.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,7 +48,11 @@ class TimetableViewModel @Inject constructor(
             .filter { it.length == 5 }
             .distinctUntilChanged()
             .debounce(500L)
-            .onEach { getGroupScheduleForDay(it, _stateFlow.value.dates.first { date -> date.clickable }) }
+            .onEach {
+                getGroupScheduleForDay(
+                    it,
+                    _stateFlow.value.dates.first { date -> date.clickable })
+            }
             .launchIn(viewModelScope)
     }
 
@@ -57,36 +62,43 @@ class TimetableViewModel @Inject constructor(
                 group = event.group,
                 date = event.date
             )
+
             is TimeTableEvent.OnClickForwardWeek -> moveScheduleWeek(event.group, event.offsetWeek)
         }
     }
 
-    private fun moveScheduleWeek(group: String, offsetWeek : Int) {
+    private fun moveScheduleWeek(group: String, offsetWeek: Int) {
         offsetWeekState += offsetWeek
         val dates = getCurrentWeek(offsetWeekState)
         _stateFlow.value = _stateFlow.value.copy(loading = true, dates = dates)
-        getGroupScheduleForDay(group,dates[0])
+        getGroupScheduleForDay(group, dates[0])
     }
 
     private fun getGroupScheduleForDay(group: String, date: DateUi) {
         val dates = changeSelectedDate(_stateFlow.value.dates, date)
-        _stateFlow.value = _stateFlow.value.copy(loading = true, dates = dates)
+        _stateFlow.value = _stateFlow.value.copy(loading = true, dates = dates, error = "")
         var numberLesson = 0
         var currentLessonTime = ""
         viewModelScope.launch {
+            try {
             scheduleInteractor.getUserWeekSchedule(group.toInt()).collect {
-                _stateFlow.value = _stateFlow.value.copy(
-                    loading = false,
-                    lessonsUi = it.getDaySchedule(date.dayOfWeek.mapToWeekDay())
-                        .map { lesson ->
-                            if (currentLessonTime != lesson.startTime) {
-                                ++numberLesson
-                                currentLessonTime = lesson.startTime
-                            }
-                            lesson.mapToLessonUi(numberLesson)},
-                    dates = dates,
-                    group = TopBarUi(group = group)
-                )
+                    _stateFlow.value = _stateFlow.value.copy(
+                        loading = false,
+                        lessonsUi = it.getDaySchedule(date.dayOfWeek.mapToWeekDay())
+                            .map { lesson ->
+                                if (currentLessonTime != lesson.startTime) {
+                                    ++numberLesson
+                                    currentLessonTime = lesson.startTime
+                                }
+                                lesson.mapToLessonUi(numberLesson)
+                            },
+                        dates = dates,
+                        group = TopBarUi(group = group)
+                    )
+            } } catch (error: Throwable) {
+                Log.d("error8", error.toString())
+                _stateFlow.value =
+                    _stateFlow.value.copy(error = "Проблемы с сетью или неправильный ввод!")
             }
         }
     }
@@ -104,23 +116,23 @@ class TimetableViewModel @Inject constructor(
             add(Calendar.DAY_OF_WEEK, offsetWeek)
             set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
         }.time
-        val wednesday  = Calendar.getInstance(timeZone).apply {
+        val wednesday = Calendar.getInstance(timeZone).apply {
             firstDayOfWeek = Calendar.MONDAY
             add(Calendar.DAY_OF_WEEK, offsetWeek)
             set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
         }.time
-        val thursday  = Calendar.getInstance(timeZone).apply {
+        val thursday = Calendar.getInstance(timeZone).apply {
             firstDayOfWeek = Calendar.MONDAY
             add(Calendar.DAY_OF_WEEK, offsetWeek)
             set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
         }.time
-        val friday  = Calendar.getInstance(timeZone).apply {
+        val friday = Calendar.getInstance(timeZone).apply {
             firstDayOfWeek = Calendar.MONDAY
             add(Calendar.DAY_OF_WEEK, offsetWeek)
             set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
         }.time
 
-        val saturday  = Calendar.getInstance(timeZone).apply {
+        val saturday = Calendar.getInstance(timeZone).apply {
             firstDayOfWeek = Calendar.MONDAY
             add(Calendar.DAY_OF_WEEK, offsetWeek)
             set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)

@@ -118,7 +118,7 @@ private fun TextOfDateBlock(text: String, color: Color) {
 fun DayOfWeekBlockPrewie() {
     val state = TimeTableState(
         loading = false,
-        error = null,
+        error = "",
         lessonsUi = listLesson,
         group = group,
         dates = dates

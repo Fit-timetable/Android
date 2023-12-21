@@ -6,7 +6,7 @@ import ru.nsu.fit.timetable.presentation.model.LessonUi
 
 data class TimeTableState(
     val loading: Boolean = false,
-    val error: String? = null,
+    val error: String = "",
     val lessonsUi: List<LessonUi> = emptyList(),
     val group: TopBarUi = TopBarUi(
         group = "20201"
