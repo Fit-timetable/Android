@@ -1,5 +1,7 @@
 package ru.nsu.fit.timetable.domain.models
 
+import ru.nsu.fit.common.models.WeekDay
+
 data class WeekSchedule(
     var monday: List<Lesson> = emptyList(),
     var tuesday: List<Lesson> = emptyList(),

@@ -11,7 +11,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     override suspend fun auth(mail: String, password: String): Tokens {
         return service.auth(
-            authBase64 = Base64.decode(mail + password, Base64.DEFAULT)
+            authBase64 = "Basic " + Base64.encodeToString("$mail:$password".toByteArray(), Base64.NO_WRAP)
         ).mapToTokens()
 
     }

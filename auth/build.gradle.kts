@@ -84,7 +84,7 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material)
     implementation(libs.material3)
-
+    implementation(libs.accompanist.systemuicontroller)
     // tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

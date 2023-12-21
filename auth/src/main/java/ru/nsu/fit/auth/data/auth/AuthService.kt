@@ -6,7 +6,7 @@ import retrofit2.http.POST
 
 interface AuthService {
     @GET("/jwt/tokens")
-    suspend fun auth(@Header("Authorization") authBase64: ByteArray): TokensRemote
+    suspend fun auth(@Header("Authorization") authBase64: String): TokensRemote
 
     @POST("/jwt/refresh")
     suspend fun authRefresh(@Header("Authorization") refreshToken: String): AuthTokensRemote

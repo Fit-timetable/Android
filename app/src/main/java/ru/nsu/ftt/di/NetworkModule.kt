@@ -13,9 +13,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import ru.nsu.fit.auth.data.auth.AuthService
 import ru.nsu.fit.auth.data.register.RegisterService
-import ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.ScheduleService
+import ru.nsu.fit.auth.domain.AuthInteractor
+import ru.nsu.fit.auth.domain.AuthRepository
+import ru.nsu.fit.auth.domain.RegisterRepository
 import ru.nsu.fit.common.ApiSettings
 import ru.nsu.fit.common.ApiSettings.Companion.TIME_OUT_DELAY
+import ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.ScheduleService
+import ru.nsu.ftt.edit_lesson.data.remote_repository.EditLessonService
 import ru.nsu.ftt.utils.AuthorizationInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
@@ -34,6 +38,18 @@ class NetworkModule {
     @Singleton
     fun provideApiSettings(): ApiSettings {
         return ApiSettings()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthInteractor(
+        authRepository: AuthRepository,
+        registerRepository: RegisterRepository,
+        apiSettings: ApiSettings,
+    ): AuthInteractor {
+        return AuthInteractor(
+            authRepository, registerRepository, apiSettings
+        )
     }
 
     @Provides
@@ -119,5 +135,10 @@ class NetworkModule {
     @Provides
     fun provideRegisterService(@NonAuthorization retrofit: Retrofit): RegisterService {
         return retrofit.create(RegisterService::class.java)
+    }
+
+    @Provides
+    fun provideEditLessonService(@Authorization retrofit: Retrofit): EditLessonService {
+        return retrofit.create(EditLessonService::class.java)
     }
 }

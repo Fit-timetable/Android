@@ -123,5 +123,5 @@ fun DayOfWeekBlockPrewie() {
         group = group,
         dates = dates
     )
-    // DayOfWeekBlock(state = state){}
+    DayOfWeekBlock(state = state, { _, _ -> }) { _, _ -> }
 }

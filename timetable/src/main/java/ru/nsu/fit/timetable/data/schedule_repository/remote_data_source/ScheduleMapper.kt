@@ -6,8 +6,8 @@ import ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.models.P
 import ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.models.WeekScheduleRemote
 import ru.nsu.fit.timetable.domain.models.Lesson
 import ru.nsu.fit.timetable.domain.models.LessonDate
-import ru.nsu.fit.timetable.domain.models.LessonParity
-import ru.nsu.fit.timetable.domain.models.LessonType
+import ru.nsu.fit.common.models.LessonParity
+import ru.nsu.fit.common.models.LessonType
 import ru.nsu.fit.timetable.domain.models.Place
 import ru.nsu.fit.timetable.domain.models.WeekSchedule
 import ru.nsu.fit.timetable.domain.models.lesson

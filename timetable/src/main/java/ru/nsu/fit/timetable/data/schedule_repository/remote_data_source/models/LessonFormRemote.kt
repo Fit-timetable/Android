@@ -1,6 +1,6 @@
 package ru.nsu.fit.timetable.data.schedule_repository.remote_data_source.models
 
-import ru.nsu.fit.timetable.domain.models.LessonType
+import ru.nsu.fit.common.models.LessonType
 
 class LessonFormRemote(
     val evenWeeksOnly: Boolean = false,

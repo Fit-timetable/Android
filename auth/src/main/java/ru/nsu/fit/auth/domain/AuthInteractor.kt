@@ -1,9 +1,8 @@
 package ru.nsu.fit.auth.domain
 
 import ru.nsu.fit.common.ApiSettings
-import javax.inject.Inject
 
-class AuthInteractor @Inject constructor(
+class AuthInteractor(
     private val authRepository: AuthRepository,
     private val registerRepository: RegisterRepository,
     private val apiSettings: ApiSettings,
@@ -14,8 +13,9 @@ class AuthInteractor @Inject constructor(
     }
 
     suspend fun authRefresh() {
-        if (apiSettings.tokens.isRefreshTokenAvailable())
-            authRepository.authRefresh(apiSettings.tokens.refreshToken)
+        val result = authRepository.authRefresh(apiSettings.tokens.refreshToken)
+        apiSettings.tokens.accessToken = result.authToken
+        apiSettings.tokens.accessTokenExpiry = result.authTokenExpire
     }
 
     suspend fun logout() {

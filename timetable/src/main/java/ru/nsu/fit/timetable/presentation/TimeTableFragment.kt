@@ -31,7 +31,8 @@ class TimeTableFragment : Fragment() {
                     state = state.value,
                     onClickDate = ::onClickDate,
                     onChangeTextWithNumberGroup = ::onChaneNumberGroup,
-                    onClickForward = ::onClickForwardWeek
+                    onClickForward = ::onClickForwardWeek,
+                    onAddClick = timeTableViewModel::openCreateLessonScreen
                 )
             }
         }

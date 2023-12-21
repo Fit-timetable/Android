@@ -13,8 +13,9 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.nsu.fit.common.FttRouter
 import ru.nsu.fit.timetable.domain.ScheduleInteractorImpl
-import ru.nsu.fit.timetable.domain.models.mapToWeekDay
+import ru.nsu.fit.common.models.mapToWeekDay
 import ru.nsu.fit.timetable.presentation.model.DateUi
 import ru.nsu.fit.timetable.presentation.model.LessonUi
 import ru.nsu.fit.timetable.presentation.model.TopBarUi
@@ -27,7 +28,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimetableViewModel @Inject constructor(
-    private val scheduleInteractor: ScheduleInteractorImpl
+    private val scheduleInteractor: ScheduleInteractorImpl,
+    private val router: FttRouter,
 ) : ViewModel() {
 
     private var _stateFlow: MutableStateFlow<TimeTableState> =
@@ -163,6 +165,12 @@ class TimetableViewModel @Inject constructor(
             }
         }
         return updateDates
+    }
+
+    fun openCreateLessonScreen() {
+        viewModelScope.launch {
+            router.openCreateLessonScreen()
+        }
     }
 
     companion object {

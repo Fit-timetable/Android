@@ -1,5 +1,8 @@
 package ru.nsu.fit.timetable.domain.models
 
+import ru.nsu.fit.common.models.LessonParity
+import ru.nsu.fit.common.models.LessonType
+
 data class Lesson(
     var id: Int? = 0,
     var place: Place = place { },
